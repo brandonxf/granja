@@ -44,13 +44,13 @@ export default function AdminDashboard() {
   const totalProducts = products.length;
   const pendingOrders = orders.filter(o => o.status === 'pendiente').length;
   const totalRevenue = orders.reduce((sum, o) => sum + o.total, 0);
-  const totalClients = 124;
+  
 
   const stats = [
     { icon: PackageIcon, label: 'Total Productos', value: totalProducts, color: '#2D5A27' },
     { icon: ShoppingCart, label: 'Pedidos Pendientes', value: pendingOrders, color: '#FFA000' },
     { icon: DollarSign, label: 'Ingresos del Mes', value: `$${(totalRevenue / 1000).toFixed(0)}K`, color: '#388E3C' },
-    { icon: Users, label: 'Clientes', value: totalClients, color: '#5D4037' },
+    { icon: Users, label: 'Clientes', color: '#5D4037' },
   ];
 
   const handleDeleteProduct = (id) => {

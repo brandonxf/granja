@@ -7,6 +7,32 @@
   background: linear-gradient(135deg, var(--primary-green) 0%, var(--dark-forest) 100%);
 }
 
+.back-btn {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  background: white;
+  color: var(--primary-green);
+  border-radius: 10px;
+  border: 1px solid rgba(0,0,0,0.06);
+  box-shadow: 0 6px 18px rgba(0,0,0,0.12);
+  cursor: pointer;
+  z-index: 60;
+  font-weight: 700;
+}
+
+.back-btn:hover {
+  transform: translateY(-2px);
+}
+
+.back-btn-text {
+  display: inline-block;
+}
+
 .login-container {
   position: relative;
   width: 100%;

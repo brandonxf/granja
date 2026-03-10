@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Leaf, Lock, Mail, Eye, EyeOff, LogIn } from 'lucide-react';
+import { Leaf, Lock, Mail, Eye, EyeOff, LogIn, ArrowLeft } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
 import './AdminLogin.css';
 
@@ -29,6 +29,15 @@ export default function AdminLogin() {
 
   return (
     <main className="login-page">
+      <button
+        type="button"
+        className="back-btn"
+        onClick={() => navigate('/')}
+        aria-label="Volver al inicio"
+      >
+        <ArrowLeft size={16} />
+        <span className="back-btn-text">Inicio</span>
+      </button>
       <div className="login-container">
         <div className="login-card">
           <div className="login-header">
@@ -50,7 +59,7 @@ export default function AdminLogin() {
                   type="email"
                   id="email"
                   className="form-input"
-                  placeholder="admin@granjaverde.com"
+                  placeholder="********"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required
@@ -99,11 +108,7 @@ export default function AdminLogin() {
             </button>
           </form>
 
-          <div className="login-footer">
-            <p className="login-hint">
-              Credenciales de prueba: admin@granjaverde.com / admin123
-            </p>
-          </div>
+          
         </div>
 
         <div className="login-decoration">

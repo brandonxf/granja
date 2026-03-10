@@ -4,20 +4,29 @@
 }
 
 .page-header {
+  background: linear-gradient(135deg, var(--primary-green) 0%, var(--dark-forest) 100%);
+  padding: var(--space-16) 0;
   text-align: center;
-  margin-bottom: var(--space-8);
+  width: 100%;
+  margin-top: -80px;
+  padding-top: 120px;
+}
+
+.products-content {
+  padding-top: var(--space-10);
 }
 
 .page-title {
-  font-size: var(--text-3xl);
-  color: var(--primary-green);
-  margin-bottom: var(--space-2);
+  font-size: var(--text-4xl);
+  color: white;
+  margin-bottom: var(--space-4);
 }
 
 .page-subtitle {
   font-size: var(--text-lg);
-  color: var(--earth-brown);
-  opacity: 0.7;
+  color: rgba(255, 255, 255, 0.8);
+  max-width: 600px;
+  margin: 0 auto;
 }
 
 .categories-filter {

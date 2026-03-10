@@ -6,6 +6,9 @@
   background: linear-gradient(135deg, var(--primary-green) 0%, var(--dark-forest) 100%);
   padding: var(--space-16) 0;
   text-align: center;
+
+  margin-top: -80px;   /* sube el bloque */
+  padding-top: 120px;  /* compensa el espacio del navbar */
 }
 
 .contact-title {

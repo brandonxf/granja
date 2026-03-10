@@ -24,14 +24,16 @@ export default function Products() {
 
   return (
     <main className="products-page">
-      <div className="container">
-        <div className="page-header">
+      <div className="page-header">
+        <div className="container">
           <h1 className="page-title">Nuestros Productos</h1>
           <p className="page-subtitle">
             Explora nuestra variedad de productos frescos y orgánicos
           </p>
         </div>
+      </div>
 
+      <div className="container products-content">
         <div className="categories-filter">
           {categories.map(({ id, name, icon }) => {
             const IconComponent = iconMap[icon];

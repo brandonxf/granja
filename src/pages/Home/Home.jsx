@@ -15,28 +15,35 @@ export default function Home() {
 
   // Typewriter state
   const lines = [
-    { id: 'eyebrow', text: 'Directo del campo a tu mesa', delay: 200 },
-    { id: 'title1', text: 'Manjares', delay: 900 },
-    { id: 'title2', text: 'del Campo', delay: 1700 },
-    { id: 'desc', text: 'Sabores auténticos, cultivados con pasión y respeto por la tierra.\nPorque lo natural siempre es mejor.', delay: 2600 },
+    { id: 'eyebrow', text: 'Directo del campo a tu mesa', speed: 32 },
+    { id: 'title1', text: 'Manjares', speed: 60 },
+    { id: 'title2', text: 'del Campo', speed: 55 },
+    { id: 'desc', text: 'Sabores auténticos, cultivados con pasión y respeto por la tierra.\nPorque lo natural siempre es mejor.', speed: 18 },
   ];
   const [typed, setTyped] = useState({});
   const [done, setDone] = useState({});
 
   useEffect(() => {
-    lines.forEach(({ id, text, delay }) => {
+    let lineIndex = 0;
+
+    const typeNext = () => {
+      if (lineIndex >= lines.length) return;
+      const { id, text, speed } = lines[lineIndex];
       let i = 0;
-      setTimeout(() => {
-        const interval = setInterval(() => {
-          i++;
-          setTyped(prev => ({ ...prev, [id]: text.slice(0, i) }));
-          if (i >= text.length) {
-            clearInterval(interval);
-            setDone(prev => ({ ...prev, [id]: true }));
-          }
-        }, 28);
-      }, delay);
-    });
+      const interval = setInterval(() => {
+        i++;
+        setTyped(prev => ({ ...prev, [id]: text.slice(0, i) }));
+        if (i >= text.length) {
+          clearInterval(interval);
+          setDone(prev => ({ ...prev, [id]: true }));
+          lineIndex++;
+          setTimeout(typeNext, 120); // short pause before next line
+        }
+      }, speed);
+    };
+
+    const startTimeout = setTimeout(typeNext, 300);
+    return () => clearTimeout(startTimeout);
   }, []);
 
   useEffect(() => {

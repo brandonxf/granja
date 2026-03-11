@@ -573,20 +573,21 @@
 .hero-title-bottom::after,
 .hero-eyebrow span::after,
 .hero-desc::after {
+  content: '';
+  display: none;
+}
+
+/* Show cursor only while actively typing (not done) */
+.hero-eyebrow span:not(.done)::after,
+.hero-title-top:not(.done)::after,
+.hero-title-bottom:not(.done)::after,
+.hero-desc:not(.done)::after {
   content: '|';
   display: inline-block;
   color: #7ec87a;
   font-weight: 300;
   margin-left: 2px;
-  animation: blink 0.7s step-end infinite;
-}
-
-/* Hide cursors once typing is done via JS class */
-.hero-title-top.done::after,
-.hero-title-bottom.done::after,
-.hero-eyebrow span.done::after,
-.hero-desc.done::after {
-  display: none;
+  animation: blink 0.65s step-end infinite;
 }
 
 @keyframes blink {

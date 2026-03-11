@@ -86,10 +86,10 @@ export default function Home() {
             <div className="hero-stat"><span className="stat-num">500+</span><span className="stat-label">Familias satisfechas</span></div>
           </div>
           </div>
-          </div>{/* hero-split */}
           <div className="hero-globe fade-in" style={{ animationDelay: '0.5s' }}>
             <GlobeCanvas size={440} />
           </div>
+          </div>{/* hero-split */}
         </div>{/* hero-inner */}
 
         <div className="scroll-cue">

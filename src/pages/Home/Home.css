@@ -132,6 +132,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  transform: translateX(3rem);
 }
 
 @media (max-width: 900px) {

@@ -82,9 +82,6 @@ export default function Header() {
               {cartCount > 0 && <span className="cart-badge">{cartCount}</span>}
             </Link>
 
-            <Link to="/productos" className="cta-btn">
-              Comprar ahora
-            </Link>
 
             <button
               className="hamburger"

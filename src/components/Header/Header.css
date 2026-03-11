@@ -148,22 +148,6 @@
   justify-content: center;
 }
 
-/* CTA — desktop only */
-.cta-btn {
-  display: none;
-  padding: 9px 20px;
-  font-family: 'DM Sans', sans-serif;
-  font-size: 0.8rem;
-  font-weight: 700;
-  color: #0f1c0e;
-  background: linear-gradient(135deg, #7ec87a, #a8e6a3);
-  border-radius: 8px;
-  text-decoration: none;
-  white-space: nowrap;
-  box-shadow: 0 4px 14px rgba(126,200,122,0.35);
-  transition: all 0.25s ease;
-}
-.cta-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(126,200,122,0.5); color: #0f1c0e; }
 
 /* ─── Hamburger — mobile only ─────────────────────────── */
 .hamburger {
@@ -199,7 +183,6 @@
 /* ─── Breakpoints ─────────────────────────────────────── */
 @media (min-width: 768px) {
   .nav { display: flex; }
-  .cta-btn { display: flex; align-items: center; }
   .hamburger { display: none; }
 }
 

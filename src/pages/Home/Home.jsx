@@ -9,6 +9,7 @@ import GlobeCanvas from '../../components/GlobeCanvas/GlobeCanvas';
 export default function Home() {
   const { products } = useApp();
   const featuredProducts = products.slice(0, 4);
+  const isMobile = typeof window !== 'undefined' && window.innerWidth <= 768;
   const heroRef = useRef(null);
   const spotlight1Ref = useRef(null);
   const spotlight2Ref = useRef(null);
@@ -25,13 +26,19 @@ export default function Home() {
   const [active, setActive] = useState(null);
 
   useEffect(() => {
-    let lineIndex = 0;
+    // On mobile, show all text instantly — no animation for performance
+    if (isMobile) {
+      const instant = {};
+      const doneAll = {};
+      lines.forEach(({ id, text }) => { instant[id] = text; doneAll[id] = true; });
+      setTyped(instant);
+      setDone(doneAll);
+      return;
+    }
 
+    let lineIndex = 0;
     const typeNext = () => {
-      if (lineIndex >= lines.length) {
-        setActive(null);
-        return;
-      }
+      if (lineIndex >= lines.length) { setActive(null); return; }
       const { id, text, speed } = lines[lineIndex];
       setActive(id);
       let i = 0;
@@ -47,9 +54,8 @@ export default function Home() {
         }
       }, speed);
     };
-
-    const startTimeout = setTimeout(typeNext, 300);
-    return () => clearTimeout(startTimeout);
+    const t = setTimeout(typeNext, 300);
+    return () => clearTimeout(t);
   }, []);
 
   useEffect(() => {
@@ -111,13 +117,13 @@ export default function Home() {
               <span key={i}>{line}{i === 0 && <br />}</span>
             ))}
           </p>
-          <div className="hero-actions" style={{ opacity: typed.desc && typed.desc.length > 10 ? 1 : 0, transition: 'opacity 0.8s ease' }}>
+          <div className="hero-actions" style={{ opacity: isMobile || (typed.desc && typed.desc.length > 10) ? 1 : 0, transition: 'opacity 0.8s ease' }}>
             <Link to="/productos" className="hero-btn-primary">
               Explorar productos <ArrowRight size={18} strokeWidth={2.5} />
             </Link>
             <Link to="/nosotros" className="hero-btn-ghost">Nuestra historia</Link>
           </div>
-          <div className="hero-stats" style={{ opacity: typed.desc && typed.desc.length > 30 ? 1 : 0, transition: 'opacity 0.8s ease 0.3s' }}>
+          <div className="hero-stats" style={{ opacity: isMobile || (typed.desc && typed.desc.length > 30) ? 1 : 0, transition: 'opacity 0.8s ease 0.3s' }}>
             <div className="hero-stat"><span className="stat-num">15+</span><span className="stat-label">Años de experiencia</span></div>
             <div className="hero-stat-divider" />
             <div className="hero-stat"><span className="stat-num">100%</span><span className="stat-label">Orgánico certificado</span></div>

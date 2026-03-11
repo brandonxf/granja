@@ -550,6 +550,23 @@
 .cta-leaf-1 { top: 50%; left: 50%; transform: translate(-50%, -50%); opacity: 0.3; }
 .cta-leaf-2 { top: 10%; right: 0; opacity: 0.15; transform: rotate(45deg); }
 
+
+/* ─── Mobile performance: disable heavy GPU effects ─── */
+@media (max-width: 768px) {
+  .orb-1, .orb-2, .orb-3 { display: none; }
+  .hero-grain { display: none; }
+  .hero-line-1, .hero-line-2 { display: none; }
+  .cursor-spotlight-1, .cursor-spotlight-2 { display: none; }
+  .header-scrolled { backdrop-filter: none; -webkit-backdrop-filter: none; }
+  .hero-bg {
+    background: linear-gradient(160deg, #0d2410 0%, #1a3a17 60%, #071a06 100%);
+  }
+  * { animation-duration: 0.01ms !important; }
+  .eyebrow-dot { animation: none; box-shadow: 0 0 6px #7ec87a; }
+  .scroll-thumb { animation: none; }
+  .feature-card:hover { transform: none; }
+}
+
 /* ─── Responsive ────────────────────────────────────── */
 @media (max-width: 900px) {
   .hero-inner {

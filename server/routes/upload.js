@@ -1,37 +1,24 @@
 import express from 'express';
 import multer from 'multer';
-import path from 'path';
-import { fileURLToPath } from 'url';
-import fs from 'fs';
+import { v2 as cloudinary } from 'cloudinary';
 import { authenticateToken, isAdmin } from '../middleware/auth.js';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
 
 const router = express.Router();
 
-// Configurar almacenamiento
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    const uploadDir = path.join(__dirname, '../uploads');
-    if (!fs.existsSync(uploadDir)) {
-      fs.mkdirSync(uploadDir, { recursive: true });
-    }
-    cb(null, uploadDir);
-  },
-  filename: (req, file, cb) => {
-    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-    const ext = path.extname(file.originalname);
-    cb(null, uniqueSuffix + ext);
-  }
+// Configurar Cloudinary
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
-// Filtrar tipos de archivo
+// Multer en memoria (no guarda en disco)
+const storage = multer.memoryStorage();
+
 const fileFilter = (req, file, cb) => {
   const allowedTypes = /jpeg|jpg|png|gif|webp/;
-  const extname = allowedTypes.test(path.extname(file.originalname).toLowerCase());
+  const extname = allowedTypes.test(file.originalname.toLowerCase());
   const mimetype = allowedTypes.test(file.mimetype);
-
   if (extname && mimetype) {
     cb(null, true);
   } else {
@@ -41,24 +28,31 @@ const fileFilter = (req, file, cb) => {
 
 const upload = multer({
   storage,
-  limits: {
-    fileSize: 5 * 1024 * 1024 // 5MB
-  },
-  fileFilter
+  limits: { fileSize: 5 * 1024 * 1024 },
+  fileFilter,
 });
 
-// Subir imagen (solo admin)
-router.post('/image', authenticateToken, isAdmin, upload.single('image'), (req, res) => {
+// Subir imagen a Cloudinary (solo admin)
+router.post('/image', authenticateToken, isAdmin, upload.single('image'), async (req, res) => {
   try {
     if (!req.file) {
       return res.status(400).json({ error: 'No se ha proporcionado ninguna imagen' });
     }
 
-    const imageUrl = `/uploads/${req.file.filename}`;
+    const result = await new Promise((resolve, reject) => {
+      cloudinary.uploader.upload_stream(
+        { folder: 'granjaverde' },
+        (error, result) => {
+          if (error) reject(error);
+          else resolve(result);
+        }
+      ).end(req.file.buffer);
+    });
+
     res.json({
       message: 'Imagen subida correctamente',
-      url: imageUrl,
-      filename: req.file.filename
+      url: result.secure_url,
+      filename: result.public_id,
     });
   } catch (error) {
     console.error('Error al subir imagen:', error);
@@ -66,45 +60,43 @@ router.post('/image', authenticateToken, isAdmin, upload.single('image'), (req, 
   }
 });
 
-// Subir múltiples imágenes (solo admin)
-router.post('/images', authenticateToken, isAdmin, upload.array('images', 10), (req, res) => {
+// Subir múltiples imágenes
+router.post('/images', authenticateToken, isAdmin, upload.array('images', 10), async (req, res) => {
   try {
     if (!req.files || req.files.length === 0) {
       return res.status(400).json({ error: 'No se han proporcionado imágenes' });
     }
 
-    const images = req.files.map(file => ({
-      url: `/uploads/${file.filename}`,
-      filename: file.filename
-    }));
+    const uploads = await Promise.all(
+      req.files.map(file =>
+        new Promise((resolve, reject) => {
+          cloudinary.uploader.upload_stream(
+            { folder: 'granjaverde' },
+            (error, result) => {
+              if (error) reject(error);
+              else resolve({ url: result.secure_url, filename: result.public_id });
+            }
+          ).end(file.buffer);
+        })
+      )
+    );
 
-    res.json({
-      message: 'Imágenes subidas correctamente',
-      images
-    });
+    res.json({ message: 'Imágenes subidas correctamente', images: uploads });
   } catch (error) {
     console.error('Error al subir imágenes:', error);
     res.status(500).json({ error: 'Error al subir imágenes' });
   }
 });
 
-// Eliminar imagen (solo admin)
-router.delete('/image', authenticateToken, isAdmin, (req, res) => {
+// Eliminar imagen de Cloudinary
+router.delete('/image', authenticateToken, isAdmin, async (req, res) => {
   try {
     const { filename } = req.body;
-    
     if (!filename) {
       return res.status(400).json({ error: 'Nombre de archivo requerido' });
     }
-
-    const filePath = path.join(__dirname, '../uploads', filename);
-    
-    if (fs.existsSync(filePath)) {
-      fs.unlinkSync(filePath);
-      res.json({ message: 'Imagen eliminada correctamente' });
-    } else {
-      res.status(404).json({ error: 'Imagen no encontrada' });
-    }
+    await cloudinary.uploader.destroy(filename);
+    res.json({ message: 'Imagen eliminada correctamente' });
   } catch (error) {
     console.error('Error al eliminar imagen:', error);
     res.status(500).json({ error: 'Error al eliminar imagen' });
@@ -119,9 +111,7 @@ router.use((err, req, res, next) => {
     }
     return res.status(400).json({ error: err.message });
   }
-  if (err) {
-    return res.status(400).json({ error: err.message });
-  }
+  if (err) return res.status(400).json({ error: err.message });
   next();
 });
 

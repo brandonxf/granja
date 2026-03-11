@@ -1,5 +1,5 @@
 /* Google Fonts */
-@import url('https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@300;400;500;600;700&family=Roboto:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,400&family=DM+Sans:wght@300;400;500;600;700&display=swap');
 
 :root {
   /* Color Palette - Verdes Tipo Campo */
@@ -15,8 +15,8 @@
   --error: #D32F2F;
   
   /* Typography */
-  --font-heading: 'Roboto Slab', serif;
-  --font-body: 'Roboto', sans-serif;
+  --font-heading: 'Fraunces', serif;
+  --font-body: 'DM Sans', sans-serif;
   
   /* Font Sizes */
   --text-xs: 0.75rem;
@@ -107,7 +107,7 @@ a:hover {
 
 button {
   font-family: var(--font-body);
-  cursor: poRoboto;
+  cursor: pointer;
   border: none;
   outline: none;
   transition: all var(--transition-base);

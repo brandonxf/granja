@@ -48,7 +48,7 @@
   background: white;
   border: 2px solid var(--light-green);
   border-radius: var(--radius-full);
-  cursor: poRoboto;
+  cursor: pointer;
   transition: all var(--transition-fast);
 }
 

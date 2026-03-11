@@ -138,7 +138,7 @@
   background: var(--cream-white);
   border: 1px solid var(--light-green);
   border-radius: var(--radius-md);
-  cursor: poRoboto;
+  cursor: pointer;
   transition: all var(--transition-fast);
 }
 
@@ -173,7 +173,7 @@
   background: #ffebee;
   border: none;
   border-radius: var(--radius-md);
-  cursor: poRoboto;
+  cursor: pointer;
   transition: all var(--transition-fast);
 }
 
@@ -226,7 +226,7 @@
   background: linear-gradient(135deg, var(--primary-green) 0%, var(--secondary-green) 100%);
   border: none;
   border-radius: var(--radius-md);
-  cursor: poRoboto;
+  cursor: pointer;
   transition: all var(--transition-base);
 }
 
@@ -243,7 +243,7 @@
   color: var(--earth-brown);
   background: transparent;
   border: none;
-  cursor: poRoboto;
+  cursor: pointer;
 }
 
 .clear-cart-btn:hover {

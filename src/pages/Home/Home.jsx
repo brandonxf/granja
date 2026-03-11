@@ -86,7 +86,7 @@ export default function Home() {
           </div>
           </div>
           <div className="hero-globe fade-in" style={{ animationDelay: '0.5s' }}>
-            <GlobeCanvas size={440} />
+            <GlobeCanvas size={560} />
           </div>
         </div>{/* hero-inner */}
 

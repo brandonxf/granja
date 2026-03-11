@@ -18,7 +18,7 @@ export default function ProductCard({ product, index = 0 }) {
   const getImageUrl = (url) => {
     if (!url) return null;
     if (url.startsWith('http')) return url;
-    return `${API_URL}${url}`;
+    return null; // URL relativa antigua (filesystem), no disponible
   };
 
   const imageUrl = getImageUrl(product.image_url);

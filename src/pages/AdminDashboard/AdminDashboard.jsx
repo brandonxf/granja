@@ -327,7 +327,7 @@ function ProductFormModal({ product, onClose, onSave }) {
   const getImageUrl = (url) => {
     if (!url) return '';
     if (url.startsWith('http')) return url;
-    return `https://granja-production.up.railway.app${url}`;
+    return ''; // URL relativa antigua (filesystem), no disponible
   };
 
   const handleImageUpload = async (e) => {

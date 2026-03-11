@@ -9,127 +9,118 @@ export default function Home() {
   const featuredProducts = products.slice(0, 4);
 
   const features = [
-    {
-      icon: <Leaf size={32} />,
-      title: '100% Orgánico',
-      description: 'Todos nuestros productos son cultivados sin pesticidas químicos.'
-    },
-    {
-      icon: <Truck size={32} />,
-      title: 'Entrega Fresca',
-      description: 'Recibe tus productos el mismo día de la cosecha.'
-    },
-    {
-      icon: <Heart size={32} />,
-      title: 'Calidad Premium',
-      description: 'Seleccionamos los mejores productos para ti y tu familia.'
-    },
-    {
-      icon: <Award size={32} />,
-      title: 'Certificaciones',
-      description: 'Productos certificados y garantizados por entidades agrícolas.'
-    }
+    { icon: <Leaf size={28} />, title: '100% Orgánico', description: 'Todos nuestros productos son cultivados sin pesticidas químicos.' },
+    { icon: <Truck size={28} />, title: 'Entrega Fresca', description: 'Recibe tus productos el mismo día de la cosecha.' },
+    { icon: <Heart size={28} />, title: 'Calidad Premium', description: 'Seleccionamos los mejores productos para ti y tu familia.' },
+    { icon: <Award size={28} />, title: 'Certificaciones', description: 'Productos certificados y garantizados por entidades agrícolas.' }
   ];
 
   return (
     <main className="home">
-      {/* Hero Section */}
+
       <section className="hero">
-        <div className="hero-background">
-          <div className="hero-overlay"></div>
-        </div>
-        <div className="hero-content container">
-          <span className="hero-badge fade-in">🌱 Fresh from the Farm</span>
-          <h1 className="hero-title fade-in" style={{ animationDelay: '0.1s' }}>
-            Productos Frescos<br />
-            <span>Directo del Campo</span>
+        <div className="hero-bg" />
+        <div className="hero-grain" />
+        <div className="orb orb-1" />
+        <div className="orb orb-2" />
+        <div className="orb orb-3" />
+        <div className="hero-line hero-line-1" />
+        <div className="hero-line hero-line-2" />
+
+        <div className="hero-inner container">
+          <div className="hero-eyebrow fade-in">
+            <span className="eyebrow-dot" />
+            Directo del campo a tu mesa
+          </div>
+          <h1 className="hero-title fade-in" style={{ animationDelay: '0.15s' }}>
+            <span className="hero-title-top">Manjares</span>
+            <span className="hero-title-bottom"><em>del</em> Campo</span>
           </h1>
-          <p className="hero-description fade-in" style={{ animationDelay: '0.2s' }}>
-            Descubre la diferencia de comer productos frescos y naturales. 
-            Cultivados con amor en nuestra granja sostenible.
+          <p className="hero-desc fade-in" style={{ animationDelay: '0.3s' }}>
+            Sabores auténticos, cultivados con pasión y respeto por la tierra.<br />
+            Porque lo natural siempre es mejor.
           </p>
-          <div className="hero-actions fade-in" style={{ animationDelay: '0.3s' }}>
-            <Link to="/productos" className="hero-button-primary">
-              Ver Productos
-              <ArrowRight size={20} />
+          <div className="hero-actions fade-in" style={{ animationDelay: '0.45s' }}>
+            <Link to="/productos" className="hero-btn-primary">
+              Explorar productos <ArrowRight size={18} strokeWidth={2.5} />
             </Link>
-            <Link to="/nosotros" className="hero-button-secondary">
-              Conócenos
-            </Link>
+            <Link to="/nosotros" className="hero-btn-ghost">Nuestra historia</Link>
+          </div>
+          <div className="hero-stats fade-in" style={{ animationDelay: '0.6s' }}>
+            <div className="hero-stat"><span className="stat-num">15+</span><span className="stat-label">Años de experiencia</span></div>
+            <div className="hero-stat-divider" />
+            <div className="hero-stat"><span className="stat-num">100%</span><span className="stat-label">Orgánico certificado</span></div>
+            <div className="hero-stat-divider" />
+            <div className="hero-stat"><span className="stat-num">500+</span><span className="stat-label">Familias satisfechas</span></div>
           </div>
         </div>
-        <div className="hero-scroll-indicator">
-          <div className="scroll-mouse">
-            <div className="scroll-wheel"></div>
-          </div>
+
+        <div className="scroll-cue">
+          <div className="scroll-track"><div className="scroll-thumb" /></div>
         </div>
       </section>
 
-      {/* Features Section */}
       <section className="features">
         <div className="container">
           <div className="features-grid">
-            {features.map((feature, index) => (
-              <div 
-                key={index} 
-                className="feature-card fade-in"
-                style={{ animationDelay: `${index * 0.1}s` }}
-              >
-                <div className="feature-icon">{feature.icon}</div>
-                <h3 className="feature-title">{feature.title}</h3>
-                <p className="feature-description">{feature.description}</p>
+            {features.map((f, i) => (
+              <div key={i} className={`feature-card reveal reveal-d${i + 1}`}>
+                <div className="feature-icon-wrap">{f.icon}</div>
+                <h3 className="feature-title">{f.title}</h3>
+                <p className="feature-desc">{f.description}</p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Featured Products */}
       <section className="featured-products">
         <div className="container">
-          <div className="section-header">
+          <div className="section-header reveal">
+            <span className="section-tag">Lo mejor de la temporada</span>
             <h2 className="section-title">Productos Destacados</h2>
-            <p className="section-subtitle">
-              Los favoritos de nuestros clientes
-            </p>
+            <p className="section-subtitle">Los favoritos de nuestros clientes</p>
           </div>
           <div className="products-grid">
             {featuredProducts.map((product, index) => (
-              <ProductCard key={product.id} product={product} index={index} />
+              <div key={product.id} className={`reveal reveal-scale reveal-d${(index % 4) + 1}`}>
+                <ProductCard product={product} index={index} />
+              </div>
             ))}
           </div>
-          <div className="section-cta">
-            <Link to="/productos" className="view-all-button">
-              Ver Todos los Productos
-              <ArrowRight size={18} />
+          <div className="section-cta reveal">
+            <Link to="/productos" className="view-all-btn">
+              Ver todos los productos <ArrowRight size={18} />
             </Link>
           </div>
         </div>
       </section>
 
-      {/* CTA Section */}
       <section className="cta-section">
         <div className="container">
-          <div className="cta-card">
+          <div className="cta-card reveal">
+            <div className="cta-bg-pattern" />
             <div className="cta-content">
+              <span className="cta-tag">Únete a nosotros</span>
               <h2 className="cta-title">¿Tienes una granja?</h2>
-              <p className="cta-description">
-                ¿Quieres ofrecer tus productos en Manjares del Campo? 
-                Contáctanos y únete a nuestra comunidad de agricultores sostenibles.
+              <p className="cta-desc">
+                Ofrece tus productos en Manjares del Campo y llega a cientos de familias que valoran lo auténtico.
               </p>
-              <Link to="/contacto" className="cta-button">
-                Contáctanos
-                <ArrowRight size={18} />
+              <Link to="/contacto" className="cta-btn">
+                Contáctanos <ArrowRight size={18} />
               </Link>
             </div>
-            <div className="cta-decoration">
-              <Leaf className="cta-leaf cta-leaf-1" />
-              <Leaf className="cta-leaf cta-leaf-2" />
-              <Leaf className="cta-leaf cta-leaf-3" />
+            <div className="cta-visual">
+              <div className="cta-circle cta-circle-1" />
+              <div className="cta-circle cta-circle-2" />
+              <div className="cta-circle cta-circle-3" />
+              <Leaf className="cta-leaf-icon cta-leaf-1" size={80} />
+              <Leaf className="cta-leaf-icon cta-leaf-2" size={48} />
             </div>
           </div>
         </div>
       </section>
+
     </main>
   );
 }

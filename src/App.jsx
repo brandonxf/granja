@@ -11,6 +11,7 @@ import Contact from './pages/Contact/Contact';
 import AdminLogin from './pages/AdminLogin/AdminLogin';
 import AdminDashboard from './pages/AdminDashboard/AdminDashboard';
 import './App.css';
+import { useScrollReveal } from './hooks/useScrollReveal';
 
 function MainLayout({ children }) {
   return (
@@ -28,6 +29,7 @@ function AdminLayout({ children }) {
 
 function AppContent() {
   const location = useLocation();
+  useScrollReveal();
   const isAdminRoute = location.pathname.startsWith('/admin');
 
   return (

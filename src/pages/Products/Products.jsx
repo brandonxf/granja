@@ -34,7 +34,7 @@ export default function Products() {
       </div>
 
       <div className="container products-content">
-        <div className="categories-filter">
+        <div className="categories-filter reveal">
           {categories.map(({ id, name, icon }) => {
             const IconComponent = iconMap[icon];
             return (
@@ -55,7 +55,7 @@ export default function Products() {
             <p>No hay productos en esta categoría</p>
           </div>
         ) : (
-          <div className="products-grid">
+          <div className="products-grid reveal">
             {filteredProducts.map((product, index) => (
               <ProductCard key={product.id} product={product} index={index} />
             ))}

@@ -4,6 +4,7 @@ import { ArrowRight, Truck, Leaf, Heart, Award } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
 import ProductCard from '../../components/ProductCard/ProductCard';
 import './Home.css';
+import GlobeCanvas from '../../components/GlobeCanvas/GlobeCanvas';
 
 export default function Home() {
   const { products } = useApp();
@@ -57,6 +58,8 @@ export default function Home() {
         <div className="cursor-spotlight cursor-spotlight-2" ref={spotlight2Ref} />
 
         <div className="hero-inner container">
+        <div className="hero-split">
+          <div className="hero-text">
           <div className="hero-eyebrow fade-in">
             <span className="eyebrow-dot" />
             Directo del campo a tu mesa
@@ -82,7 +85,12 @@ export default function Home() {
             <div className="hero-stat-divider" />
             <div className="hero-stat"><span className="stat-num">500+</span><span className="stat-label">Familias satisfechas</span></div>
           </div>
-        </div>
+          </div>
+          </div>{/* hero-split */}
+          <div className="hero-globe fade-in" style={{ animationDelay: '0.5s' }}>
+            <GlobeCanvas size={440} />
+          </div>
+        </div>{/* hero-inner */}
 
         <div className="scroll-cue">
           <div className="scroll-track"><div className="scroll-thumb" /></div>

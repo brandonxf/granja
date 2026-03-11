@@ -22,13 +22,18 @@ export default function Home() {
   ];
   const [typed, setTyped] = useState({});
   const [done, setDone] = useState({});
+  const [active, setActive] = useState(null);
 
   useEffect(() => {
     let lineIndex = 0;
 
     const typeNext = () => {
-      if (lineIndex >= lines.length) return;
+      if (lineIndex >= lines.length) {
+        setActive(null);
+        return;
+      }
       const { id, text, speed } = lines[lineIndex];
+      setActive(id);
       let i = 0;
       const interval = setInterval(() => {
         i++;
@@ -36,8 +41,9 @@ export default function Home() {
         if (i >= text.length) {
           clearInterval(interval);
           setDone(prev => ({ ...prev, [id]: true }));
+          setActive(null);
           lineIndex++;
-          setTimeout(typeNext, 120); // short pause before next line
+          setTimeout(typeNext, 120);
         }
       }, speed);
     };
@@ -94,13 +100,13 @@ export default function Home() {
           <div className="hero-text">
           <div className="hero-eyebrow">
             <span className="eyebrow-dot" />
-            <span className={done.eyebrow ? 'done' : ''}>{typed.eyebrow || '\u00a0'}</span>
+            <span className={done.eyebrow ? 'done' : active === 'eyebrow' ? 'typing' : 'pending'}>{typed.eyebrow || '\u00a0'}</span>
           </div>
           <h1 className="hero-title">
-            <span className={`hero-title-top${done.title1 ? ' done' : ''}`}>{typed.title1 || '\u00a0'}</span>
-            <span className={`hero-title-bottom${done.title2 ? ' done' : ''}`}>{typed.title2 || '\u00a0'}</span>
+            <span className={`hero-title-top ${done.title1 ? 'done' : active === 'title1' ? 'typing' : 'pending'}`}>{typed.title1 || '\u00a0'}</span>
+            <span className={`hero-title-bottom ${done.title2 ? 'done' : active === 'title2' ? 'typing' : 'pending'}`}>{typed.title2 || '\u00a0'}</span>
           </h1>
-          <p className={`hero-desc${done.desc ? ' done' : ''}`}>
+          <p className={`hero-desc ${done.desc ? 'done' : active === 'desc' ? 'typing' : 'pending'}`}>
             {(typed.desc || '').split('\n').map((line, i) => (
               <span key={i}>{line}{i === 0 && <br />}</span>
             ))}

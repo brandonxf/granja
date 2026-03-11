@@ -569,19 +569,11 @@
 }
 
 /* ─── Typewriter cursor ──────────────────────────────── */
-.hero-title-top::after,
-.hero-title-bottom::after,
-.hero-eyebrow span::after,
-.hero-desc::after {
-  content: '';
-  display: none;
-}
-
-/* Show cursor only while actively typing (not done) */
-.hero-eyebrow span:not(.done)::after,
-.hero-title-top:not(.done)::after,
-.hero-title-bottom:not(.done)::after,
-.hero-desc:not(.done)::after {
+/* Only show cursor on the element actively being typed */
+.hero-eyebrow span.typing::after,
+.hero-title-top.typing::after,
+.hero-title-bottom.typing::after,
+.hero-desc.typing::after {
   content: '|';
   display: inline-block;
   color: #7ec87a;

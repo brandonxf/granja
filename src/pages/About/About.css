@@ -108,3 +108,9 @@
 }
 
 
+
+@media (max-width: 640px) {
+  .about-hero { padding: var(--space-12) 0 var(--space-8); padding-top: 100px; }
+  .about-title { font-size: 2rem; }
+  .about-content { padding: var(--space-8) 0; }
+}

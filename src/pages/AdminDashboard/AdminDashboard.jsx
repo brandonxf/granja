@@ -21,6 +21,12 @@ import './AdminDashboard.css';
 
 const API_URL = 'https://granja-production.up.railway.app';
 
+const getImageUrl = (url) => {
+  if (!url) return '';
+  if (url.startsWith('http')) return url;
+  return ''; // URL relativa antigua (filesystem), no disponible
+};
+
 export default function AdminDashboard() {
   const { admin, logoutAdmin, products, orders, addProduct, updateProduct, deleteProduct } = useApp();
   const navigate = useNavigate();
@@ -322,13 +328,6 @@ function ProductFormModal({ product, onClose, onSave }) {
     featured: product?.featured || false,
     active: product?.active !== undefined ? product.active : true,
   });
-
-  // Función para obtener la URL completa de la imagen
-  const getImageUrl = (url) => {
-    if (!url) return '';
-    if (url.startsWith('http')) return url;
-    return ''; // URL relativa antigua (filesystem), no disponible
-  };
 
   const handleImageUpload = async (e) => {
     const file = e.target.files[0];

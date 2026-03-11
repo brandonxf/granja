@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import { useEffect, useRef } from 'react';
 import { ArrowRight, Truck, Leaf, Heart, Award } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
 import ProductCard from '../../components/ProductCard/ProductCard';
@@ -7,6 +8,32 @@ import './Home.css';
 export default function Home() {
   const { products } = useApp();
   const featuredProducts = products.slice(0, 4);
+  const heroRef = useRef(null);
+  const spotlight1Ref = useRef(null);
+  const spotlight2Ref = useRef(null);
+
+  useEffect(() => {
+    const hero = heroRef.current;
+    if (!hero) return;
+
+    const handleMouseMove = (e) => {
+      const rect = hero.getBoundingClientRect();
+      const x = ((e.clientX - rect.left) / rect.width) * 100;
+      const y = ((e.clientY - rect.top) / rect.height) * 100;
+
+      if (spotlight1Ref.current) {
+        spotlight1Ref.current.style.left = `${x}%`;
+        spotlight1Ref.current.style.top = `${y}%`;
+      }
+      if (spotlight2Ref.current) {
+        spotlight2Ref.current.style.left = `${100 - x * 0.6}%`;
+        spotlight2Ref.current.style.top = `${100 - y * 0.6}%`;
+      }
+    };
+
+    hero.addEventListener('mousemove', handleMouseMove);
+    return () => hero.removeEventListener('mousemove', handleMouseMove);
+  }, []);
 
   const features = [
     { icon: <Leaf size={28} />, title: '100% Orgánico', description: 'Todos nuestros productos son cultivados sin pesticidas químicos.' },
@@ -18,7 +45,7 @@ export default function Home() {
   return (
     <main className="home">
 
-      <section className="hero">
+      <section className="hero" ref={heroRef}>
         <div className="hero-bg" />
         <div className="hero-grain" />
         <div className="orb orb-1" />
@@ -26,6 +53,8 @@ export default function Home() {
         <div className="orb orb-3" />
         <div className="hero-line hero-line-1" />
         <div className="hero-line hero-line-2" />
+        <div className="cursor-spotlight cursor-spotlight-1" ref={spotlight1Ref} />
+        <div className="cursor-spotlight cursor-spotlight-2" ref={spotlight2Ref} />
 
         <div className="hero-inner container">
           <div className="hero-eyebrow fade-in">

@@ -151,4 +151,19 @@ router.post('/categories', authenticateToken, isAdmin, async (req, res) => {
   }
 });
 
+// Limpiar URLs viejas de filesystem (temporal)
+router.post('/cleanup-images', async (req, res) => {
+  try {
+    const result = await pool.query(`
+      UPDATE products 
+      SET image_url = NULL 
+      WHERE image_url IS NOT NULL 
+      AND image_url NOT LIKE 'http%'
+    `);
+    res.json({ message: `${result.rowCount} producto(s) actualizados` });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
 export default router;

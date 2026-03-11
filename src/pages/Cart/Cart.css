@@ -92,6 +92,17 @@
   border-radius: var(--radius-md);
 }
 
+.cart-item-image-placeholder {
+  width: 80px;
+  height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--cream-white);
+  border-radius: var(--radius-md);
+  color: var(--light-green);
+}
+
 .cart-item-details {
   min-width: 0;
 }
@@ -127,7 +138,7 @@
   background: var(--cream-white);
   border: 1px solid var(--light-green);
   border-radius: var(--radius-md);
-  cursor: pointer;
+  cursor: poRoboto;
   transition: all var(--transition-fast);
 }
 
@@ -162,7 +173,7 @@
   background: #ffebee;
   border: none;
   border-radius: var(--radius-md);
-  cursor: pointer;
+  cursor: poRoboto;
   transition: all var(--transition-fast);
 }
 
@@ -215,7 +226,7 @@
   background: linear-gradient(135deg, var(--primary-green) 0%, var(--secondary-green) 100%);
   border: none;
   border-radius: var(--radius-md);
-  cursor: pointer;
+  cursor: poRoboto;
   transition: all var(--transition-base);
 }
 
@@ -232,7 +243,7 @@
   color: var(--earth-brown);
   background: transparent;
   border: none;
-  cursor: pointer;
+  cursor: poRoboto;
 }
 
 .clear-cart-btn:hover {
@@ -270,3 +281,5 @@
     position: relative;
   }
 }
+
+

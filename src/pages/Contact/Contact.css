@@ -148,10 +148,12 @@
   background: var(--primary-green);
   border: none;
   border-radius: var(--radius-md);
-  cursor: pointer;
+  cursor: poRoboto;
   transition: all var(--transition-base);
 }
 
 .submit-btn:hover {
   background: var(--secondary-green);
 }
+
+

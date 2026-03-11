@@ -48,7 +48,7 @@
   background: white;
   border: 2px solid var(--light-green);
   border-radius: var(--radius-full);
-  cursor: pointer;
+  cursor: poRoboto;
   transition: all var(--transition-fast);
 }
 
@@ -81,3 +81,5 @@
   color: var(--earth-brown);
   opacity: 0.6;
 }
+
+

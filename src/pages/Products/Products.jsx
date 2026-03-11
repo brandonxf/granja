@@ -20,7 +20,7 @@ export default function Products() {
 
   const filteredProducts = activeCategory === 'all' 
     ? products 
-    : products.filter(p => p.category === activeCategory);
+    : products.filter(p => p.category_id?.toString() === activeCategory);
 
   return (
     <main className="products-page">

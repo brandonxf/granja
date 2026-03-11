@@ -16,10 +16,7 @@ export default function AdminLogin() {
     e.preventDefault();
     setLoading(true);
     
-    // Simulate network delay
-    await new Promise(resolve => setTimeout(resolve, 800));
-    
-    const success = loginAdmin(email, password);
+    const success = await loginAdmin(email, password);
     setLoading(false);
     
     if (success) {

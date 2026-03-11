@@ -12,10 +12,14 @@ import {
   Users,
   DollarSign,
   TrendingUp,
-  Package as PackageIcon
+  Package as PackageIcon,
+  Image
 } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
+import { uploadAPI } from '../../api/client';
 import './AdminDashboard.css';
+
+const API_URL = 'http://localhost:3001';
 
 export default function AdminDashboard() {
   const { admin, logoutAdmin, products, orders, addProduct, updateProduct, deleteProduct } = useApp();
@@ -184,15 +188,21 @@ export default function AdminDashboard() {
                   {products.map(product => (
                     <tr key={product.id}>
                       <td>
-                        <img 
-                          src={product.image} 
-                          alt={product.name} 
-                          className="product-thumb"
-                        />
+                        {product.image_url ? (
+                          <img 
+                            src={product.image_url} 
+                            alt={product.name} 
+                            className="product-thumb"
+                          />
+                        ) : (
+                          <div className="product-thumb-placeholder">
+                            <Image size={20} />
+                          </div>
+                        )}
                       </td>
                       <td>{product.name}</td>
-                      <td className="capitalize">{product.category}</td>
-                      <td>${product.price.toLocaleString()}</td>
+                      <td className="capitalize">{product.category_name || 'Sin categoría'}</td>
+                      <td>${parseFloat(product.price).toLocaleString()}</td>
                       <td>{product.stock}</td>
                       <td>
                         <div className="action-buttons">
@@ -299,18 +309,44 @@ export default function AdminDashboard() {
 }
 
 function ProductFormModal({ product, onClose, onSave }) {
+  const { categories } = useApp();
+  const [uploading, setUploading] = useState(false);
   const [formData, setFormData] = useState({
     name: product?.name || '',
     description: product?.description || '',
     price: product?.price || 0,
-    category: product?.category || 'frutas',
+    category_id: product?.category_id || 1,
     stock: product?.stock || 0,
-    image: product?.image || '',
-    isNew: product?.isNew || false,
-    isOffer: product?.isOffer || false,
+    image_url: product?.image_url || '',
+    unit: product?.unit || 'kg',
+    featured: product?.featured || false,
+    active: product?.active !== undefined ? product.active : true,
   });
 
-  const categories = ['frutas', 'verduras', 'lacteos', 'huevos', 'carnes', 'artesanales'];
+  // Función para obtener la URL completa de la imagen
+  const getImageUrl = (url) => {
+    if (!url) return '';
+    if (url.startsWith('http')) return url;
+    return `http://localhost:3001${url}`;
+  };
+
+  const handleImageUpload = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    try {
+      setUploading(true);
+      const result = await uploadAPI.uploadImage(file);
+      setFormData(prev => ({ ...prev, image_url: result.url }));
+      alert('Imagen subida correctamente');
+    } catch (error) {
+      alert('Error al subir imagen: ' + error.message);
+    } finally {
+      setUploading(false);
+      // Limpiar el input para poder subir la misma imagen de nuevo
+      e.target.value = '';
+    }
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -337,11 +373,11 @@ function ProductFormModal({ product, onClose, onSave }) {
             <div className="form-group">
               <label>Categoría</label>
               <select
-                value={formData.category}
-                onChange={e => setFormData({ ...formData, category: e.target.value })}
+                value={formData.category_id}
+                onChange={e => setFormData({ ...formData, category_id: Number(e.target.value) })}
               >
-                {categories.map(cat => (
-                  <option key={cat} value={cat} className="capitalize">{cat}</option>
+                {categories.filter(c => c.id !== 'all').map(cat => (
+                  <option key={cat.id} value={cat.id}>{cat.name}</option>
                 ))}
               </select>
             </div>
@@ -375,30 +411,62 @@ function ProductFormModal({ product, onClose, onSave }) {
             </div>
           </div>
           <div className="form-group">
-            <label>URL de Imagen</label>
+            <label>Imagen del Producto</label>
+            <div className="image-upload-container">
+              {formData.image_url ? (
+                <div className="image-preview">
+                  <img src={getImageUrl(formData.image_url)} alt="Preview" />
+                  <button 
+                    type="button" 
+                    className="remove-image"
+                    onClick={() => setFormData(prev => ({ ...prev, image_url: '' }))}
+                  >
+                    ×
+                  </button>
+                </div>
+              ) : (
+                <div className="image-upload-box">
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={handleImageUpload}
+                    disabled={uploading}
+                  />
+                  {uploading ? (
+                    <span>Subiendo...</span>
+                  ) : (
+                    <>
+                      <Image size={24} />
+                      <span>Click para subir imagen</span>
+                    </>
+                  )}
+                </div>
+              )}
+            </div>
             <input
-              type="url"
-              value={formData.image}
-              onChange={e => setFormData({ ...formData, image: e.target.value })}
-              placeholder="https://..."
+              type="text"
+              value={formData.image_url}
+              onChange={e => setFormData(prev => ({ ...prev, image_url: e.target.value }))}
+              placeholder="URL de imagen (se completa al subir)"
+              className="image-url-input"
             />
           </div>
           <div className="form-checkboxes">
             <label>
               <input
                 type="checkbox"
-                checked={formData.isNew}
-                onChange={e => setFormData({ ...formData, isNew: e.target.checked })}
+                checked={formData.featured}
+                onChange={e => setFormData({ ...formData, featured: e.target.checked })}
               />
-              Producto Nuevo
+              Producto Destacado
             </label>
             <label>
               <input
                 type="checkbox"
-                checked={formData.isOffer}
-                onChange={e => setFormData({ ...formData, isOffer: e.target.checked })}
+                checked={formData.active}
+                onChange={e => setFormData({ ...formData, active: e.target.checked })}
               />
-              En Oferta
+              Activo
             </label>
           </div>
           <div className="modal-actions">

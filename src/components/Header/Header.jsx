@@ -40,9 +40,11 @@ export default function Header() {
     }
   }, [location.pathname]);
 
+  const isCartPage = location.pathname === '/carrito';
+
   return (
     <>
-      <header className={`header ${scrolled ? 'header-scrolled' : ''}`}>
+      <header className={`header ${scrolled ? 'header-scrolled' : ''} ${isCartPage ? 'header-dark' : ''}`}>
         <div className="header-inner">
 
           {/* Logo */}

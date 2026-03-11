@@ -1,17 +1,8 @@
 import { createContext, useContext, useState, useEffect } from 'react';
-
-// Mock Data - Productos de Granja
-const initialProducts = [
-  
-];
-
-// Mock Orders
-const initialOrders = [
-  
-];
+import { productsAPI, authAPI } from '../api/client';
 
 // Categories
-const categories = [
+const defaultCategories = [
   { id: 'all', name: 'Todos', icon: 'Grid' },
   { id: 'frutas', name: 'Frutas', icon: 'Apple' },
   { id: 'verduras', name: 'Verduras', icon: 'Carrot' },
@@ -25,8 +16,9 @@ const AppContext = createContext();
 
 export function AppProvider({ children }) {
   // Products State
-  const [products, setProducts] = useState(initialProducts);
-  const [productIdCounter, setProductIdCounter] = useState(100);
+  const [products, setProducts] = useState([]);
+  const [categories, setCategories] = useState(defaultCategories);
+  const [loading, setLoading] = useState(true);
   
   // Cart State
   const [cart, setCart] = useState(() => {
@@ -41,10 +33,16 @@ export function AppProvider({ children }) {
   });
   
   // Orders State
-  const [orders] = useState(initialOrders);
+  const [orders, setOrders] = useState([]);
   
   // Toast State
   const [toast, setToast] = useState(null);
+
+  // Cargar productos al iniciar
+  useEffect(() => {
+    loadProducts();
+    loadCategories();
+  }, []);
 
   // Persist Cart
   useEffect(() => {
@@ -59,6 +57,46 @@ export function AppProvider({ children }) {
       localStorage.removeItem('granjaverde-admin');
     }
   }, [admin]);
+
+  // Cargar productos desde la API
+  const loadProducts = async () => {
+    try {
+      setLoading(true);
+      const data = await productsAPI.getAll();
+      setProducts(data);
+    } catch (error) {
+      console.error('Error al cargar productos:', error);
+      showToast('Error al cargar productos', 'error');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Cargar categorías desde la API
+  const loadCategories = async () => {
+    try {
+      const data = await productsAPI.getCategories();
+      if (data.length > 0) {
+        // Mapeo de nombres de categorías a iconos
+        const iconMapping = {
+          'Verduras': 'Carrot',
+          'Frutas': 'Apple',
+          'Huevos': 'Egg',
+          'Lácteos': 'Milk',
+          'Carnes': 'Beef',
+          'Artesanales': 'Sprout'
+        };
+        const apiCategories = data.map(cat => ({
+          id: cat.id.toString(),
+          name: cat.name,
+          icon: iconMapping[cat.name] || 'Grid'
+        }));
+        setCategories([{ id: 'all', name: 'Todos', icon: 'Grid' }, ...apiCategories]);
+      }
+    } catch (error) {
+      console.error('Error al cargar categorías:', error);
+    }
+  };
 
   // Cart Functions
   const addToCart = (product) => {
@@ -94,43 +132,68 @@ export function AppProvider({ children }) {
     setCart([]);
   };
 
-  const cartTotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+  const cartTotal = cart.reduce((sum, item) => sum + (parseFloat(item.price) * item.quantity), 0);
   const cartCount = cart.reduce((sum, item) => sum + item.quantity, 0);
 
   // Admin Functions
-  const loginAdmin = (email, password) => {
-    if (email === 'admin@granjaverde.com' && password === 'admin123') {
-      const adminData = { email, name: 'Administrador', token: 'mock-jwt-token' };
+  const loginAdmin = async (email, password) => {
+    try {
+      const data = await authAPI.login(email, password);
+      const adminData = { 
+        email: data.admin.email, 
+        name: data.admin.name, 
+        token: data.token 
+      };
+      localStorage.setItem('adminToken', data.token);
       setAdmin(adminData);
       showToast('Bienvenido al panel de administración', 'success');
       return true;
+    } catch (error) {
+      showToast(error.message || 'Credenciales incorrectas', 'error');
+      return false;
     }
-    showToast('Credenciales incorrectas', 'error');
-    return false;
   };
 
   const logoutAdmin = () => {
+    authAPI.logout();
     setAdmin(null);
     showToast('Sesión cerrada correctamente', 'success');
   };
 
   // Product Functions (Admin)
-  const addProduct = (product) => {
-    const newId = productIdCounter + 1;
-    setProductIdCounter(newId);
-    const newProduct = { ...product, id: newId };
-    setProducts(prev => [...prev, newProduct]);
-    showToast('Producto agregado correctamente', 'success');
+  const addProduct = async (product) => {
+    try {
+      const newProduct = await productsAPI.create(product);
+      setProducts(prev => [newProduct, ...prev]);
+      showToast('Producto agregado correctamente', 'success');
+      return newProduct;
+    } catch (error) {
+      showToast(error.message || 'Error al agregar producto', 'error');
+      throw error;
+    }
   };
 
-  const updateProduct = (id, updates) => {
-    setProducts(prev => prev.map(p => p.id === id ? { ...p, ...updates } : p));
-    showToast('Producto actualizado correctamente', 'success');
+  const updateProduct = async (id, updates) => {
+    try {
+      const updatedProduct = await productsAPI.update(id, updates);
+      setProducts(prev => prev.map(p => p.id === parseInt(id) ? updatedProduct : p));
+      showToast('Producto actualizado correctamente', 'success');
+      return updatedProduct;
+    } catch (error) {
+      showToast(error.message || 'Error al actualizar producto', 'error');
+      throw error;
+    }
   };
 
-  const deleteProduct = (id) => {
-    setProducts(prev => prev.filter(p => p.id !== id));
-    showToast('Producto eliminado correctamente', 'success');
+  const deleteProduct = async (id) => {
+    try {
+      await productsAPI.delete(id);
+      setProducts(prev => prev.filter(p => p.id !== parseInt(id)));
+      showToast('Producto eliminado correctamente', 'success');
+    } catch (error) {
+      showToast(error.message || 'Error al eliminar producto', 'error');
+      throw error;
+    }
   };
 
   // Toast Function
@@ -143,9 +206,11 @@ export function AppProvider({ children }) {
     // Products
     products,
     categories,
+    loading,
     addProduct,
     updateProduct,
     deleteProduct,
+    loadProducts,
     
     // Cart
     cart,

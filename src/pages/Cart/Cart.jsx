@@ -1,10 +1,18 @@
 import { Link } from 'react-router-dom';
-import { ShoppingCart, Plus, Minus, Trash2, ArrowLeft } from 'lucide-react';
+import { ShoppingCart, Plus, Minus, Trash2, ArrowLeft, Image } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
 import './Cart.css';
 
+const API_URL = 'http://localhost:3001';
+
 export default function Cart() {
   const { cart, removeFromCart, updateQuantity, cartTotal, clearCart } = useApp();
+
+  const getImageUrl = (url) => {
+    if (!url) return null;
+    if (url.startsWith('http')) return url;
+    return `${API_URL}${url}`;
+  };
 
   const formatPrice = (price) => {
     return new Intl.NumberFormat('es-CO', {
@@ -46,11 +54,17 @@ export default function Cart() {
           <div className="cart-items">
             {cart.map((item) => (
               <div key={item.id} className="cart-item">
-                <img 
-                  src={item.image} 
-                  alt={item.name} 
-                  className="cart-item-image"
-                />
+                {item.image_url ? (
+                  <img 
+                    src={getImageUrl(item.image_url)} 
+                    alt={item.name} 
+                    className="cart-item-image"
+                  />
+                ) : (
+                  <div className="cart-item-image-placeholder">
+                    <Image size={24} />
+                  </div>
+                )}
                 <div className="cart-item-details">
                   <h3 className="cart-item-name">{item.name}</h3>
                   <p className="cart-item-price">{formatPrice(item.price)}</p>

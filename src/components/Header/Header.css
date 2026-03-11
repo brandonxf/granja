@@ -21,6 +21,12 @@
   box-shadow: 0 1px 0 rgba(255,255,255,0.04), 0 8px 32px rgba(0,0,0,0.35);
 }
 
+/* Header siempre oscuro para páginas específicas */
+.header.header-dark {
+  background: rgba(15, 28, 14, 0.95);
+  backdrop-filter: blur(12px);
+}
+
 .header-inner {
   width: 100%;
   max-width: 1280px;
@@ -65,7 +71,7 @@
 }
 
 .logo-name {
-  font-family: 'Playfair Display', serif;
+  font-family: 'Roboto Slab', serif;
   font-size: 1.2rem;
   font-weight: 700;
   color: #ffffff;
@@ -73,7 +79,7 @@
 }
 
 .logo-sub {
-  font-family: 'Nunito', sans-serif;
+  font-family: 'Roboto', sans-serif;
   font-size: 0.65rem;
   font-weight: 400;
   color: #7ec87a;
@@ -107,13 +113,13 @@
               opacity 0.25s ease;
   box-shadow: 0 0 12px rgba(126, 200, 122, 0.6);
   opacity: 0;
-  pointer-events: none;
+  poRoboto-events: none;
 }
 
 .nav-link {
   position: relative;
   padding: 8px 18px;
-  font-family: 'Nunito', sans-serif;
+  font-family: 'Roboto', sans-serif;
   font-size: 0.82rem;
   font-weight: 600;
   letter-spacing: 1.2px;
@@ -184,7 +190,7 @@
 .cta-btn {
   display: none;
   padding: 9px 20px;
-  font-family: 'Nunito', sans-serif;
+  font-family: 'Roboto', sans-serif;
   font-size: 0.8rem;
   font-weight: 700;
   letter-spacing: 0.5px;
@@ -222,7 +228,7 @@
   background: rgba(255,255,255,0.05);
   border: 1px solid rgba(255,255,255,0.1);
   border-radius: 10px;
-  cursor: pointer;
+  cursor: poRoboto;
   transition: background 0.2s ease;
 }
 
@@ -290,7 +296,7 @@
 }
 
 .drawer-logo {
-  font-family: 'Playfair Display', serif;
+  font-family: 'Roboto Slab', serif;
   font-size: 1.4rem;
   color: #7ec87a;
   margin-bottom: 2.5rem;
@@ -310,7 +316,7 @@
   align-items: center;
   gap: 14px;
   padding: 14px 16px;
-  font-family: 'Nunito', sans-serif;
+  font-family: 'Roboto', sans-serif;
   font-size: 1rem;
   font-weight: 600;
   color: rgba(255,255,255,0.55);
@@ -335,7 +341,7 @@
   letter-spacing: 1px;
   color: rgba(255,255,255,0.2);
   font-weight: 400;
-  font-family: 'Nunito', sans-serif;
+  font-family: 'Roboto', sans-serif;
 }
 
 .drawer-link-active .drawer-link-num {
@@ -348,7 +354,7 @@
   gap: 10px;
   padding: 14px 16px;
   color: rgba(255,255,255,0.6);
-  font-family: 'Nunito', sans-serif;
+  font-family: 'Roboto', sans-serif;
   font-size: 0.9rem;
   font-weight: 600;
   text-decoration: none;
@@ -394,4 +400,6 @@
   from { opacity: 0; transform: translateX(16px); }
   to { opacity: 1; transform: translateX(0); }
 }
+
+
 

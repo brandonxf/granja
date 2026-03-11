@@ -41,7 +41,7 @@ export default function AdminLogin() {
             <div className="login-logo">
               <Leaf size={40} />
             </div>
-            <h1 className="login-title">GranjaVerde</h1>
+            <h1 className="login-title">Manjares del Campo</h1>
             <p className="login-subtitle">Panel de Administración</p>
           </div>
 

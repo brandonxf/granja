@@ -17,9 +17,9 @@ export default function About() {
         <div className="container">
           <div className="about-grid">
             <div className="about-text">
-              <h2>GranjaVerde: Tradición y Sostenibilidad</h2>
+              <h2>Manjares del Campo: Tradición y Sostenibilidad</h2>
               <p>
-                Fundada en 1985 por nuestros abuelos, GranjaVerde ha sido durante 
+                Fundada en 1985 por nuestros abuelos, Manjares del Campo ha sido durante 
                 décadas un símbolo de agricultura sostenible en nuestra región. 
                 Lo que comenzó como una pequeña granja familiar hoy es un compromiso 
                 con la calidad y el cuidado del medio ambiente.

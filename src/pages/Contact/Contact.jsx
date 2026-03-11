@@ -66,7 +66,7 @@ export default function Contact() {
                   </div>
                   <div>
                     <h3>Email</h3>
-                    <p>info@granjaverde.com</p>
+                    <p>info@manjaresdel campo.com</p>
                   </div>
                 </div>
               </div>

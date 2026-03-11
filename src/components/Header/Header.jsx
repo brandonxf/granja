@@ -56,8 +56,8 @@ export default function Header() {
               </svg>
             </div>
             <div className="logo-text-wrap">
-              <span className="logo-name">Granja</span>
-              <span className="logo-sub">Verde</span>
+              <span className="logo-name">Manjares</span>
+              <span className="logo-sub">del Campo</span>
             </div>
           </Link>
 
@@ -103,7 +103,7 @@ export default function Header() {
       <div className={`mobile-drawer ${mobileMenuOpen ? 'drawer-open' : ''}`}>
         <div className="drawer-inner">
           <div className="drawer-logo">
-            <span>GranjaVerde</span>
+            <span>Manjares del Campo</span>
           </div>
           <nav className="drawer-nav">
             {navLinks.map(({ path, label }, i) => (

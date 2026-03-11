@@ -22,13 +22,13 @@ export function AppProvider({ children }) {
   
   // Cart State
   const [cart, setCart] = useState(() => {
-    const savedCart = localStorage.getItem('granjaverde-cart');
+    const savedCart = localStorage.getItem('manjaresdelcampo-cart');
     return savedCart ? JSON.parse(savedCart) : [];
   });
   
   // Auth State
   const [admin, setAdmin] = useState(() => {
-    const savedAdmin = localStorage.getItem('granjaverde-admin');
+    const savedAdmin = localStorage.getItem('manjaresdelcampo-admin');
     return savedAdmin ? JSON.parse(savedAdmin) : null;
   });
   
@@ -46,15 +46,15 @@ export function AppProvider({ children }) {
 
   // Persist Cart
   useEffect(() => {
-    localStorage.setItem('granjaverde-cart', JSON.stringify(cart));
+    localStorage.setItem('manjaresdelcampo-cart', JSON.stringify(cart));
   }, [cart]);
 
   // Persist Admin
   useEffect(() => {
     if (admin) {
-      localStorage.setItem('granjaverde-admin', JSON.stringify(admin));
+      localStorage.setItem('manjaresdelcampo-admin', JSON.stringify(admin));
     } else {
-      localStorage.removeItem('granjaverde-admin');
+      localStorage.removeItem('manjaresdelcampo-admin');
     }
   }, [admin]);
 

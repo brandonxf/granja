@@ -114,7 +114,7 @@ export default function Home() {
             <div className="cta-content">
               <h2 className="cta-title">¿Tienes una granja?</h2>
               <p className="cta-description">
-                ¿Quieres ofrecer tus productos en GranjaVerde? 
+                ¿Quieres ofrecer tus productos en Manjares del Campo? 
                 Contáctanos y únete a nuestra comunidad de agricultores sostenibles.
               </p>
               <Link to="/contacto" className="cta-button">

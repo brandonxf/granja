@@ -74,7 +74,7 @@ export default function AdminDashboard() {
       {/* Sidebar */}
       <aside className="admin-sidebar">
         <div className="sidebar-header">
-          <h2 className="sidebar-title">GranjaVerde</h2>
+          <h2 className="sidebar-title">Manjares del Campo</h2>
           <span className="sidebar-badge">Admin</span>
         </div>
         

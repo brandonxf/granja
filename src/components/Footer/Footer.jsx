@@ -11,7 +11,7 @@ export default function Footer() {
           <div className="footer-column">
             <Link to="/" className="footer-logo">
               <Leaf className="footer-logo-icon" />
-              <span className="footer-logo-text">GranjaVerde</span>
+              <span className="footer-logo-text">Manjares del Campo</span>
             </Link>
             <p className="footer-description">
               Productos frescos directamente del campo a tu mesa. 
@@ -55,7 +55,7 @@ export default function Footer() {
               </div>
               <div className="contact-item">
                 <Mail size={18} className="contact-icon" />
-                <span>info@granjaverde.com</span>
+                <span>info@manjaresdel campo.com</span>
               </div>
             </div>
           </div>
@@ -70,7 +70,7 @@ export default function Footer() {
         </div>
 
         <div className="footer-bottom">
-          <p>&copy; 2026 GranjaVerde. Todos los derechos reservados.</p>
+          <p>&copy; 2026 Manjares del Campo. Todos los derechos reservados.</p>
         </div>
       </div>
     </footer>

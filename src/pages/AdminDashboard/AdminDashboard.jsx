@@ -190,7 +190,7 @@ export default function AdminDashboard() {
                       <td>
                         {product.image_url ? (
                           <img 
-                            src={product.image_url} 
+                            src={getImageUrl(product.image_url)} 
                             alt={product.name} 
                             className="product-thumb"
                           />

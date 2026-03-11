@@ -3,7 +3,7 @@ import { ShoppingCart, Plus, Minus, Trash2, ArrowLeft, Image } from 'lucide-reac
 import { useApp } from '../../context/AppContext';
 import './Cart.css';
 
-const API_URL = 'http://localhost:3001';
+const API_URL = 'https://granja-production.up.railway.app';
 
 export default function Cart() {
   const { cart, removeFromCart, updateQuantity, cartTotal, clearCart } = useApp();

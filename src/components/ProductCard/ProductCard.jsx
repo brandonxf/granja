@@ -2,7 +2,7 @@ import { ShoppingCart, Tag, Sparkles, Image } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
 import './ProductCard.css';
 
-const API_URL = 'http://localhost:3001';
+const API_URL = 'https://granja-production.up.railway.app';
 
 export default function ProductCard({ product, index = 0 }) {
   const { addToCart } = useApp();

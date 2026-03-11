@@ -19,7 +19,7 @@ import { useApp } from '../../context/AppContext';
 import { uploadAPI } from '../../api/client';
 import './AdminDashboard.css';
 
-const API_URL = 'http://localhost:3001';
+const API_URL = 'https://granja-production.up.railway.app';
 
 export default function AdminDashboard() {
   const { admin, logoutAdmin, products, orders, addProduct, updateProduct, deleteProduct } = useApp();
@@ -327,7 +327,7 @@ function ProductFormModal({ product, onClose, onSave }) {
   const getImageUrl = (url) => {
     if (!url) return '';
     if (url.startsWith('http')) return url;
-    return `http://localhost:3001${url}`;
+    return `https://granja-production.up.railway.app${url}`;
   };
 
   const handleImageUpload = async (e) => {

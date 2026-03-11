@@ -567,3 +567,29 @@
   .hero-stats { gap: 1rem; flex-wrap: wrap; }
   .stat-num { font-size: 1.4rem; }
 }
+
+/* ─── Typewriter cursor ──────────────────────────────── */
+.hero-title-top::after,
+.hero-title-bottom::after,
+.hero-eyebrow span::after,
+.hero-desc::after {
+  content: '|';
+  display: inline-block;
+  color: #7ec87a;
+  font-weight: 300;
+  margin-left: 2px;
+  animation: blink 0.7s step-end infinite;
+}
+
+/* Hide cursors once typing is done via JS class */
+.hero-title-top.done::after,
+.hero-title-bottom.done::after,
+.hero-eyebrow span.done::after,
+.hero-desc.done::after {
+  display: none;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}

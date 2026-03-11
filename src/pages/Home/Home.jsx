@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { ArrowRight, Truck, Leaf, Heart, Award } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
 import ProductCard from '../../components/ProductCard/ProductCard';
@@ -12,6 +12,32 @@ export default function Home() {
   const heroRef = useRef(null);
   const spotlight1Ref = useRef(null);
   const spotlight2Ref = useRef(null);
+
+  // Typewriter state
+  const lines = [
+    { id: 'eyebrow', text: 'Directo del campo a tu mesa', delay: 200 },
+    { id: 'title1', text: 'Manjares', delay: 900 },
+    { id: 'title2', text: 'del Campo', delay: 1700 },
+    { id: 'desc', text: 'Sabores auténticos, cultivados con pasión y respeto por la tierra.\nPorque lo natural siempre es mejor.', delay: 2600 },
+  ];
+  const [typed, setTyped] = useState({});
+  const [done, setDone] = useState({});
+
+  useEffect(() => {
+    lines.forEach(({ id, text, delay }) => {
+      let i = 0;
+      setTimeout(() => {
+        const interval = setInterval(() => {
+          i++;
+          setTyped(prev => ({ ...prev, [id]: text.slice(0, i) }));
+          if (i >= text.length) {
+            clearInterval(interval);
+            setDone(prev => ({ ...prev, [id]: true }));
+          }
+        }, 28);
+      }, delay);
+    });
+  }, []);
 
   useEffect(() => {
     const hero = heroRef.current;
@@ -59,25 +85,26 @@ export default function Home() {
 
         <div className="hero-inner container">
           <div className="hero-text">
-          <div className="hero-eyebrow fade-in">
+          <div className="hero-eyebrow">
             <span className="eyebrow-dot" />
-            Directo del campo a tu mesa
+            <span className={done.eyebrow ? 'done' : ''}>{typed.eyebrow || '\u00a0'}</span>
           </div>
-          <h1 className="hero-title fade-in" style={{ animationDelay: '0.15s' }}>
-            <span className="hero-title-top">Manjares</span>
-            <span className="hero-title-bottom"><em>del</em> Campo</span>
+          <h1 className="hero-title">
+            <span className={`hero-title-top${done.title1 ? ' done' : ''}`}>{typed.title1 || '\u00a0'}</span>
+            <span className={`hero-title-bottom${done.title2 ? ' done' : ''}`}>{typed.title2 || '\u00a0'}</span>
           </h1>
-          <p className="hero-desc fade-in" style={{ animationDelay: '0.3s' }}>
-            Sabores auténticos, cultivados con pasión y respeto por la tierra.<br />
-            Porque lo natural siempre es mejor.
+          <p className={`hero-desc${done.desc ? ' done' : ''}`}>
+            {(typed.desc || '').split('\n').map((line, i) => (
+              <span key={i}>{line}{i === 0 && <br />}</span>
+            ))}
           </p>
-          <div className="hero-actions fade-in" style={{ animationDelay: '0.45s' }}>
+          <div className="hero-actions" style={{ opacity: typed.desc && typed.desc.length > 10 ? 1 : 0, transition: 'opacity 0.8s ease' }}>
             <Link to="/productos" className="hero-btn-primary">
               Explorar productos <ArrowRight size={18} strokeWidth={2.5} />
             </Link>
             <Link to="/nosotros" className="hero-btn-ghost">Nuestra historia</Link>
           </div>
-          <div className="hero-stats fade-in" style={{ animationDelay: '0.6s' }}>
+          <div className="hero-stats" style={{ opacity: typed.desc && typed.desc.length > 30 ? 1 : 0, transition: 'opacity 0.8s ease 0.3s' }}>
             <div className="hero-stat"><span className="stat-num">15+</span><span className="stat-label">Años de experiencia</span></div>
             <div className="hero-stat-divider" />
             <div className="hero-stat"><span className="stat-num">100%</span><span className="stat-label">Orgánico certificado</span></div>

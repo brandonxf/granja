@@ -58,7 +58,6 @@ export default function Home() {
         <div className="cursor-spotlight cursor-spotlight-2" ref={spotlight2Ref} />
 
         <div className="hero-inner container">
-        <div className="hero-split">
           <div className="hero-text">
           <div className="hero-eyebrow fade-in">
             <span className="eyebrow-dot" />
@@ -89,7 +88,6 @@ export default function Home() {
           <div className="hero-globe fade-in" style={{ animationDelay: '0.5s' }}>
             <GlobeCanvas size={440} />
           </div>
-          </div>{/* hero-split */}
         </div>{/* hero-inner */}
 
         <div className="scroll-cue">

@@ -110,7 +110,36 @@
 .hero-inner {
   position: relative;
   z-index: 10;
+  width: 100%;
   padding-top: 100px;
+  padding-bottom: 60px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+  gap: 3rem;
+  min-height: 100vh;
+  box-sizing: border-box;
+}
+
+.hero-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.hero-globe {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@media (max-width: 900px) {
+  .hero-inner {
+    grid-template-columns: 1fr;
+    min-height: auto;
+  }
+  .hero-globe {
+    display: none;
+  }
 }
 
 .hero-eyebrow {

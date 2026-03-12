@@ -43,7 +43,7 @@ export default function ProductCard({ product, index = 0 }) {
         )}
         {product.featured && (
           <span className="product-badge product-badge-new">
-            <Sparkles size={11} />
+            <Sparkles size={10} />
             Destacado
           </span>
         )}
@@ -52,7 +52,7 @@ export default function ProductCard({ product, index = 0 }) {
       <div className="product-content">
         {product.category_name && (
           <span className="product-category">
-            <Leaf size={11} />
+            <Leaf size={10} />
             {product.category_name}
           </span>
         )}
@@ -61,22 +61,23 @@ export default function ProductCard({ product, index = 0 }) {
           <p className="product-description">{product.description}</p>
         )}
 
-        <div className="product-price-container">
-          <span className="product-price">{formatPrice(product.price)}</span>
-          {product.originalPrice && (
-            <span className="product-original-price">
-              {formatPrice(product.originalPrice)}
-            </span>
-          )}
+        <div className="product-footer">
+          <div className="product-price-container">
+            <span className="product-price">{formatPrice(product.price)}</span>
+            {product.originalPrice && (
+              <span className="product-original-price">
+                {formatPrice(product.originalPrice)}
+              </span>
+            )}
+          </div>
+          <button
+            className="add-to-cart-button"
+            onClick={() => addToCart(product)}
+            aria-label="Agregar al carrito"
+          >
+            <ShoppingCart size={17} />
+          </button>
         </div>
-
-        <button
-          className="add-to-cart-button"
-          onClick={() => addToCart(product)}
-        >
-          <ShoppingCart size={16} />
-          <span>Agregar al carrito</span>
-        </button>
       </div>
     </div>
   );

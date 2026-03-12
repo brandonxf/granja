@@ -51,7 +51,7 @@ export default function AdminLogin() {
                 Correo Electrónico
               </label>
               <div className="input-wrapper">
-                <Mail className="input-icon" size={18} />
+                <span className="input-icon"><Mail size={18} /></span>
                 <input
                   type="email"
                   id="email"
@@ -69,7 +69,7 @@ export default function AdminLogin() {
                 Contraseña
               </label>
               <div className="input-wrapper">
-                <Lock className="input-icon" size={18} />
+                <span className="input-icon"><Lock size={18} /></span>
                 <input
                   type={showPassword ? 'text' : 'password'}
                   id="password"

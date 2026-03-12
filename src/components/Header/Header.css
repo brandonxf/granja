@@ -300,13 +300,8 @@
   width: auto;
   object-fit: contain;
   display: block;
-  filter: brightness(0) invert(1);
 }
 
-/* When header is scrolled (light bg), show original logo colors */
-.header-scrolled .logo-img {
-  filter: none;
-}
 
 .drawer-logo-img {
   height: 50px;

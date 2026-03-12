@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
-import { Leaf, Mail, Phone, MapPin, Facebook, Instagram, Twitter } from 'lucide-react';
+import { Mail, Phone, MapPin, Facebook, Instagram, Twitter } from 'lucide-react';
+import logoImg from '../../assets/logo.png';
 import './Footer.css';
 
 export default function Footer() {
@@ -10,8 +11,7 @@ export default function Footer() {
           {/* Column 1: About */}
           <div className="footer-column">
             <Link to="/" className="footer-logo">
-              <Leaf className="footer-logo-icon" />
-              <span className="footer-logo-text">Manjares del Campo</span>
+              <img src={logoImg} alt="Manjares del Campo" className="footer-logo-img" />
             </Link>
             <p className="footer-description">
               Productos frescos directamente del campo a tu mesa. 

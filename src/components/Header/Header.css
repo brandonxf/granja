@@ -294,3 +294,24 @@
   from { opacity: 0; }
   to   { opacity: 1; }
 }
+
+.logo-img {
+  height: 44px;
+  width: auto;
+  object-fit: contain;
+  display: block;
+  filter: brightness(0) invert(1);
+}
+
+/* When header is scrolled (light bg), show original logo colors */
+.header-scrolled .logo-img {
+  filter: none;
+}
+
+.drawer-logo-img {
+  height: 50px;
+  width: auto;
+  object-fit: contain;
+  display: block;
+  filter: none;
+}

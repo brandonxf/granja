@@ -79,25 +79,22 @@
 }
 
 .login-logo {
-  display: inline-flex;
+  display: flex;
   align-items: center;
   justify-content: center;
-  width: 64px; height: 64px;
-  margin-bottom: 1.25rem;
-  background: linear-gradient(135deg, #2D5A27, #4A7C43);
-  border-radius: 16px;
-  color: white;
-  box-shadow: 0 6px 20px rgba(45,90,39,0.25);
+  margin-bottom: 1rem;
 }
 
-.login-title {
-  font-family: 'Fraunces', serif;
-  font-size: 1.5rem;
-  font-weight: 700;
-  color: var(--primary-green);
-  margin-bottom: 4px;
-  line-height: 1.2;
+.login-logo-img {
+  height: 90px;
+  width: auto;
+  object-fit: contain;
+  display: block;
+  border-radius: 12px;
+  overflow: hidden;
 }
+
+.login-title { display: none; }
 
 .login-subtitle {
   font-size: 0.875rem;

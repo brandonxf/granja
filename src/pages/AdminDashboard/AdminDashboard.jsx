@@ -54,7 +54,7 @@ export default function AdminDashboard() {
       {/* Sidebar */}
       <aside className="admin-sidebar">
         <div className="sidebar-header">
-          <div className="sidebar-title">Manjares del Campo</div>
+          <img src={logoImg} alt="Manjares del Campo" className="sidebar-logo-img" />
           <span className="sidebar-badge">Panel Admin</span>
         </div>
 

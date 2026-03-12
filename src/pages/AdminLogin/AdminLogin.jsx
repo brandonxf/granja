@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Leaf, Lock, Mail, Eye, EyeOff, LogIn, ArrowLeft } from 'lucide-react';
+import { Lock, Mail, Eye, EyeOff, LogIn, ArrowLeft } from 'lucide-react';
+import logoImg from '../../assets/logo.png';
 import { useApp } from '../../context/AppContext';
 import './AdminLogin.css';
 
@@ -39,9 +40,8 @@ export default function AdminLogin() {
         <div className="login-card">
           <div className="login-header">
             <div className="login-logo">
-              <Leaf size={40} />
+              <img src={logoImg} alt="Manjares del Campo" className="login-logo-img" />
             </div>
-            <h1 className="login-title">Manjares del Campo</h1>
             <p className="login-subtitle">Panel de Administración</p>
           </div>
 

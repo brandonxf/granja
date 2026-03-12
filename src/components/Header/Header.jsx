@@ -3,6 +3,7 @@ import { Link, useLocation } from 'react-router-dom';
 import { ShoppingCart, Menu, X } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
 import './Header.css';
+import logoImg from '../../assets/logo.png';
 
 export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -49,16 +50,7 @@ export default function Header() {
 
           {/* Logo */}
           <Link to="/" className="logo">
-            <div className="logo-mark">
-              <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M16 4C16 4 6 10 6 19C6 24.5 10.5 28 16 28C21.5 28 26 24.5 26 19C26 10 16 4 16 4Z" fill="currentColor" opacity="0.9"/>
-                <path d="M16 28V16M16 16C16 16 11 12 9 9M16 16C16 16 21 12 23 9" stroke="white" strokeWidth="1.5" strokeLinecap="round"/>
-              </svg>
-            </div>
-            <div className="logo-text-wrap">
-              <span className="logo-name">Manjares</span>
-              <span className="logo-sub">del Campo</span>
-            </div>
+            <img src={logoImg} alt="Manjares del Campo" className="logo-img" />
           </Link>
 
           {/* Desktop Nav */}
@@ -100,7 +92,7 @@ export default function Header() {
       <div className={`mobile-drawer ${mobileMenuOpen ? 'drawer-open' : ''}`}>
         <div className="drawer-inner">
           <div className="drawer-logo">
-            <span>Manjares del Campo</span>
+            <img src={logoImg} alt="Manjares del Campo" className="drawer-logo-img" />
           </div>
           <nav className="drawer-nav">
             {navLinks.map(({ path, label }, i) => (

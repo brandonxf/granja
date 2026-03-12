@@ -71,10 +71,9 @@ export default function ProductCard({ product, index = 0 }) {
             </div>
             <button
               className="add-to-cart-button"
-              onClick={(e) => { e.stopPropagation(); addToCart(product); }}
-              aria-label="Agregar al carrito"
+              onClick={(e) => { e.stopPropagation(); openModal(e); }}
             >
-              <ShoppingCart size={17} />
+              Comprar
             </button>
           </div>
         </div>

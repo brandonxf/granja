@@ -10,7 +10,7 @@
 
 /* ─── Sidebar ─────────────────────────────────────────── */
 .admin-sidebar {
-  width: 230px;
+  width: 260px;
   flex-shrink: 0;
   display: flex;
   flex-direction: column;

@@ -116,13 +116,29 @@
 .contact-item {
   display: flex;
   align-items: center;
-  gap: var(--space-2);
+  gap: 12px;
   font-size: var(--text-sm);
+  color: rgba(255,255,255,0.75);
 }
 
-.contact-icon {
-  color: var(--accent-yellow);
+.contact-icon-wrap {
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.12);
+  display: flex;
+  align-items: center;
+  justify-content: center;
   flex-shrink: 0;
+  color: rgba(255,255,255,0.85);
+  transition: background 0.2s ease, border-color 0.2s ease;
+}
+
+.contact-item:hover .contact-icon-wrap {
+  background: rgba(126,200,122,0.15);
+  border-color: rgba(126,200,122,0.3);
+  color: #7ec87a;
 }
 
 .footer-admin {

@@ -46,16 +46,16 @@ export default function Footer() {
             <h4 className="footer-title">Contáctanos</h4>
             <div className="footer-contact">
               <div className="contact-item">
-                <MapPin size={18} className="contact-icon" />
+                <div className="contact-icon-wrap"><MapPin size={16} /></div>
                 <span>Vereda El Carmen, Funza</span>
               </div>
               <div className="contact-item">
-                <Phone size={18} className="contact-icon" />
+                <div className="contact-icon-wrap"><Phone size={16} /></div>
                 <span>+57 300 123 4567</span>
               </div>
               <div className="contact-item">
-                <Mail size={18} className="contact-icon" />
-                <span>info@manjaresdel campo.com</span>
+                <div className="contact-icon-wrap"><Mail size={16} /></div>
+                <span>info@manjaresdelcampo.com</span>
               </div>
             </div>
           </div>

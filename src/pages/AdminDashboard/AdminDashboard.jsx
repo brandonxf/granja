@@ -39,10 +39,10 @@ export default function AdminDashboard() {
   const totalRevenue = orders.reduce((sum, o) => sum + o.total, 0);
 
   const stats = [
-    { icon: Package,    label: 'Total Productos',    value: totalProducts,  color: 'rgba(126,200,122,0.15)', iconColor: '#7ec87a' },
-    { icon: ShoppingCart, label: 'Pedidos Pendientes', value: pendingOrders, color: 'rgba(251,191,36,0.15)',  iconColor: '#fbbf24' },
-    { icon: DollarSign, label: 'Ingresos del Mes',   value: `$${(totalRevenue/1000).toFixed(0)}K`, color: 'rgba(99,179,237,0.15)', iconColor: '#63b3ed' },
-    { icon: Users,      label: 'Clientes',            value: '—',            color: 'rgba(196,181,253,0.15)', iconColor: '#c4b5fd' },
+    { icon: Package,      label: 'Total Productos',    value: totalProducts,                         bg: 'rgba(45,90,39,0.1)',   iconColor: '#2D5A27' },
+    { icon: ShoppingCart, label: 'Pedidos Pendientes', value: pendingOrders,                         bg: 'rgba(251,191,36,0.12)', iconColor: '#92690a' },
+    { icon: DollarSign,   label: 'Ingresos del Mes',   value: `$${(totalRevenue/1000).toFixed(0)}K`, bg: 'rgba(45,90,39,0.08)',   iconColor: '#2D5A27' },
+    { icon: Users,        label: 'Clientes',            value: '—',                                   bg: 'rgba(45,90,39,0.06)',   iconColor: '#4A7C43' },
   ];
 
   const handleDeleteProduct = (id) => {
@@ -97,14 +97,14 @@ export default function AdminDashboard() {
             </div>
 
             <div className="stats-grid">
-              {stats.map(({ icon: Icon, label, value, color, iconColor }) => (
+              {stats.map(({ icon: Icon, label, value, bg, iconColor }) => (
                 <div className="stat-card" key={label}>
-                  <div className="stat-icon" style={{ background: color }}>
+                  <div className="stat-icon" style={{ background: bg }}>
                     <Icon size={20} color={iconColor} />
                   </div>
                   <div className="stat-info">
                     <div className="stat-label">{label}</div>
-                    <div className="stat-value" style={{ color: iconColor }}>{value}</div>
+                    <div className="stat-value">{value}</div>
                   </div>
                 </div>
               ))}

@@ -634,3 +634,26 @@
   .products-table, .orders-table { overflow-x: auto; }
   .modal-content { padding: 1.5rem; max-height: 95vh; }
 }
+
+/* ─── Dashboard helpers ───────────────────────────────── */
+.dashboard-table-title {
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: rgba(45,90,39,0.45);
+  margin-bottom: 1rem;
+}
+
+.dashboard-empty {
+  font-size: 0.875rem;
+  color: rgba(45,90,39,0.4);
+  text-align: center;
+  padding: 2rem 0;
+}
+
+.text-green { color: var(--primary-green) !important; }
+.capitalize { text-transform: capitalize; }
+
+/* Fix stat value — always dark green regardless of icon color */
+.stat-value { color: var(--primary-green) !important; }

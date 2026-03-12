@@ -1,5 +1,5 @@
 .login-page {
-  min-height: 100vh;
+  height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -7,7 +7,8 @@
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  position: relative;
+  position: fixed;
+  inset: 0;
   overflow: hidden;
   font-family: 'DM Sans', sans-serif;
 }

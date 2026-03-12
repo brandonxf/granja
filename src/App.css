@@ -4,7 +4,7 @@
   min-height: 100vh;
 }
 
-main:not(.admin-main) {
+main:not(.admin-main):not(.login-page) {
   margin-top: 70px;
 }
 

@@ -57,6 +57,7 @@ export default function AdminLogin() {
                   id="email"
                   className="form-input"
                   placeholder="admin@ejemplo.com"
+                  autoComplete="off"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required
@@ -75,6 +76,7 @@ export default function AdminLogin() {
                   id="password"
                   className="form-input"
                   placeholder="••••••••"
+                  autoComplete="new-password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   required

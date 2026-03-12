@@ -131,17 +131,17 @@
 .input-wrapper {
   display: flex;
   align-items: center;
-  background: rgba(255,255,255,0.07);
+  background: rgba(20, 50, 18, 0.8) !important;
   border: 1px solid rgba(255,255,255,0.12);
   border-radius: 10px;
-  transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
   overflow: hidden;
 }
 
 .input-wrapper:focus-within {
   border-color: rgba(126,200,122,0.6);
   box-shadow: 0 0 0 3px rgba(126,200,122,0.1);
-  background: rgba(255,255,255,0.1);
+  background: rgba(20, 55, 18, 0.9) !important;
 }
 
 .input-icon {
@@ -163,8 +163,8 @@
   flex: 1;
   padding: 11px 10px;
   font-size: 0.9rem;
-  color: rgba(255,255,255,0.9);
-  background: transparent;
+  color: rgba(255,255,255,0.9) !important;
+  background: transparent !important;
   border: none !important;
   outline: none !important;
   box-shadow: none !important;
@@ -179,7 +179,7 @@
 .form-input:-webkit-autofill:hover,
 .form-input:-webkit-autofill:focus {
   -webkit-text-fill-color: rgba(255,255,255,0.9);
-  -webkit-box-shadow: 0 0 0px 1000px rgba(30,60,25,0.95) inset;
+  -webkit-box-shadow: 0 0 0px 1000px rgb(20, 50, 18) inset;
   transition: background-color 5000s ease-in-out 0s;
   caret-color: white;
 }

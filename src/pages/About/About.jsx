@@ -1,5 +1,6 @@
 import { Leaf, Heart, TreePine } from 'lucide-react';
 import './About.css';
+import aboutFarm from '../../assets/about-farm.jpg';
 
 export default function About() {
   return (
@@ -36,7 +37,7 @@ export default function About() {
             </div>
             <div className="about-image">
               <img 
-                src="https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=600&h=400&fit=crop" 
+                src={aboutFarm} 
                 alt="Nuestra granja"
               />
             </div>

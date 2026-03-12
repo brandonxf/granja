@@ -7,6 +7,7 @@ import {
 import { useApp } from '../../context/AppContext';
 import { uploadAPI } from '../../api/client';
 import './AdminDashboard.css';
+import logoImg from '../../assets/logo.png';
 
 const API_URL = 'https://granja-production.up.railway.app';
 

@@ -86,12 +86,14 @@
 }
 
 .login-logo-img {
-  height: 90px;
+  height: 110px;
   width: auto;
   object-fit: contain;
   display: block;
-  border-radius: 12px;
-  overflow: hidden;
+  background: linear-gradient(135deg, #2D5A27, #3d6e35);
+  border-radius: 20px;
+  padding: 14px 20px;
+  box-shadow: 0 6px 24px rgba(45,90,39,0.25);
 }
 
 .login-title { display: none; }

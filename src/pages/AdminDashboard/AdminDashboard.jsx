@@ -73,7 +73,7 @@ export default function AdminDashboard() {
 
         <div className="sidebar-footer">
           <div className="sidebar-admin-avatar">A</div>
-          <div>
+          <div className="sidebar-admin-info">
             <div className="sidebar-admin-name">Administrador</div>
             <div className="sidebar-admin-role">admin@manjaresdelcampo.com</div>
           </div>

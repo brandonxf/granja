@@ -141,12 +141,14 @@
   color: var(--primary-green);
   opacity: 0.45;
   pointer-events: none;
-  z-index: 1;
+  z-index: 2;
+  display: flex;
+  align-items: center;
 }
 
 .form-input {
   width: 100%;
-  padding: 11px 42px 11px 42px;
+  padding: 11px 44px 11px 42px;
   font-size: 0.9rem;
   color: var(--earth-brown);
   background: #f7faf6;
@@ -156,6 +158,8 @@
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
   font-family: 'DM Sans', sans-serif;
   box-sizing: border-box;
+  position: relative;
+  z-index: 1;
 }
 
 .form-input:focus {

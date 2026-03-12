@@ -4,37 +4,26 @@
   align-items: center;
   justify-content: center;
   padding: 2rem;
-  background: linear-gradient(160deg, #0d2410 0%, #1a3a17 40%, #0f2a0c 70%, #071a06 100%);
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
   position: relative;
   overflow: hidden;
   font-family: 'DM Sans', sans-serif;
 }
 
-/* Floating orbs like hero */
+/* Dark overlay over the farm image */
 .login-page::before {
   content: '';
   position: absolute;
-  width: 500px; height: 500px;
-  background: radial-gradient(circle, rgba(74,124,67,0.35) 0%, transparent 70%);
-  top: -100px; right: -100px;
-  border-radius: 50%;
-  pointer-events: none;
-  animation: orb-drift 12s ease-in-out infinite alternate;
+  inset: 0;
+  background: linear-gradient(160deg, rgba(7,26,6,0.82) 0%, rgba(13,36,16,0.78) 50%, rgba(7,26,6,0.85) 100%);
+  backdrop-filter: blur(3px);
+  -webkit-backdrop-filter: blur(3px);
+  z-index: 0;
 }
-.login-page::after {
-  content: '';
-  position: absolute;
-  width: 400px; height: 400px;
-  background: radial-gradient(circle, rgba(126,200,122,0.18) 0%, transparent 70%);
-  bottom: -80px; left: -80px;
-  border-radius: 50%;
-  pointer-events: none;
-  animation: orb-drift 16s ease-in-out infinite alternate-reverse;
-}
-@keyframes orb-drift {
-  from { transform: translate(0, 0); }
-  to   { transform: translate(30px, 20px); }
-}
+
+
 
 .back-btn {
   position: fixed;

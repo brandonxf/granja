@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Lock, Mail, Eye, EyeOff, LogIn, ArrowLeft } from 'lucide-react';
 import logoImg from '../../assets/logo.png';
+import farmBg from '../../assets/farm-bg.jpg';
 import { useApp } from '../../context/AppContext';
 import './AdminLogin.css';
 
@@ -26,7 +27,7 @@ export default function AdminLogin() {
   };
 
   return (
-    <main className="login-page">
+    <main className="login-page" style={{ backgroundImage: `url(${farmBg})` }}>
       <button
         type="button"
         className="back-btn"

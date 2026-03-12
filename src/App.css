@@ -4,7 +4,7 @@
   min-height: 100vh;
 }
 
-main {
+main:not(.admin-main) {
   margin-top: 70px;
 }
 

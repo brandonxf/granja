@@ -111,28 +111,31 @@ export default function AdminDashboard() {
             </div>
 
             <div className="glass-card">
-              <h3 style={{ color: 'rgba(255,255,255,0.6)', fontSize: '0.8rem', letterSpacing: '1px', textTransform: 'uppercase', marginBottom: '1.5rem' }}>
-                Productos Recientes
-              </h3>
-              <table style={{ width: '100%', borderCollapse: 'collapse' }}>
-                <thead>
-                  <tr>
-                    {['Producto','Categoría','Precio','Stock'].map(h => (
-                      <th key={h} style={{ padding: '10px 16px', fontSize: '0.7rem', fontWeight: 600, letterSpacing: '1.5px', textTransform: 'uppercase', color: 'rgba(255,255,255,0.3)', textAlign: 'left', borderBottom: '1px solid rgba(255,255,255,0.06)' }}>{h}</th>
-                    ))}
-                  </tr>
-                </thead>
-                <tbody>
-                  {products.slice(0,5).map(p => (
-                    <tr key={p.id}>
-                      <td style={{ padding: '12px 16px', fontSize: '0.875rem', color: 'rgba(255,255,255,0.75)', borderBottom: '1px solid rgba(255,255,255,0.04)' }}>{p.name}</td>
-                      <td style={{ padding: '12px 16px', fontSize: '0.875rem', color: 'rgba(255,255,255,0.4)', borderBottom: '1px solid rgba(255,255,255,0.04)', textTransform: 'capitalize' }}>{p.category_name || '—'}</td>
-                      <td style={{ padding: '12px 16px', fontSize: '0.875rem', color: '#7ec87a', borderBottom: '1px solid rgba(255,255,255,0.04)' }}>${parseFloat(p.price).toLocaleString()}</td>
-                      <td style={{ padding: '12px 16px', fontSize: '0.875rem', color: 'rgba(255,255,255,0.5)', borderBottom: '1px solid rgba(255,255,255,0.04)' }}>{p.stock}</td>
+              <p className="dashboard-table-title">Productos Recientes</p>
+              {products.length === 0 ? (
+                <p className="dashboard-empty">No hay productos aún.</p>
+              ) : (
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Producto</th>
+                      <th>Categoría</th>
+                      <th>Precio</th>
+                      <th>Stock</th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
+                  </thead>
+                  <tbody>
+                    {products.slice(0, 5).map(p => (
+                      <tr key={p.id}>
+                        <td style={{ color: '#5D4037' }}>{p.name}</td>
+                        <td style={{ color: '#5D4037', textTransform: 'capitalize' }}>{p.category_name || '—'}</td>
+                        <td style={{ color: '#2D5A27', fontWeight: 600 }}>${parseFloat(p.price).toLocaleString()}</td>
+                        <td style={{ color: '#5D4037' }}>{p.stock}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              )}
             </div>
           </div>
         )}
@@ -206,10 +209,10 @@ export default function AdminDashboard() {
                 <tbody>
                   {orders.map(order => (
                     <tr key={order.id}>
-                      <td style={{ color: 'rgba(255,255,255,0.4)' }}>#{order.id}</td>
+                      <td style={{ color: 'rgba(45,90,39,0.5)' }}>#{order.id}</td>
                       <td>{order.client}</td>
-                      <td style={{ color: 'rgba(255,255,255,0.4)' }}>{order.date}</td>
-                      <td style={{ color: '#7ec87a' }}>${order.total.toLocaleString()}</td>
+                      <td style={{ color: 'rgba(45,90,39,0.5)' }}>{order.date}</td>
+                      <td style={{ color: '#2D5A27', fontWeight: 600 }}>${order.total.toLocaleString()}</td>
                       <td><span className={`status-badge status-${order.status}`}>{order.status}</span></td>
                     </tr>
                   ))}

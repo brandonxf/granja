@@ -1,7 +1,7 @@
 import './WhatsAppButton.css';
 
 const PHONE = '573154143417';
-const WELCOME_MSG = 'Hola! Me gustaría saber más sobre sus productos 🌿';
+const WELCOME_MSG = 'Hola! Me gustaria saber mas sobre sus productos';
 
 export default function WhatsAppButton() {
   const handleClick = () => {

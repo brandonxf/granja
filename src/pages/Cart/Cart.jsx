@@ -11,10 +11,10 @@ function buildWhatsAppOrder(cart, total) {
   }).format(p);
 
   const lines = cart.map(item =>
-    `• ${item.quantity}x ${item.name} — ${formatPrice(item.price * item.quantity)}`
+    `- ${item.quantity}x ${item.name}: ${formatPrice(item.price * item.quantity)}`
   ).join('\n');
 
-  return `¡Hola! Quiero realizar un pedido 🌿\n\n🛒 *Mi pedido:*\n${lines}\n\n💰 *Total: ${formatPrice(total)}*\n\n¿Me pueden confirmar disponibilidad y coordinar la entrega?`;
+  return `Hola! Quiero realizar un pedido:\n\n*Mi pedido:*\n${lines}\n\n*Total: ${formatPrice(total)}*\n\nMe pueden confirmar disponibilidad y coordinar la entrega?`;
 }
 
 export default function Cart() {

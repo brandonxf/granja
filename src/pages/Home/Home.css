@@ -222,6 +222,24 @@
   line-height: 0.95;
 }
 
+/* SplitText renders inline-block — force block inside title */
+.hero-title .split-parent {
+  display: block !important;
+  overflow: visible !important;
+}
+
+/* SplitText in eyebrow and desc stay inline */
+.hero-eyebrow .split-parent {
+  display: inline !important;
+  overflow: visible !important;
+}
+
+.hero-desc .split-parent {
+  display: block !important;
+  overflow: visible !important;
+  text-align: left !important;
+}
+
 .hero-title-top {
   font-family: 'Fraunces', serif;
   font-size: clamp(4.5rem, 13vw, 10.5rem);

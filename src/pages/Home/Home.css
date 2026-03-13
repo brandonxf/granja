@@ -11,6 +11,30 @@
   padding-top: 72px;
 }
 
+/* Antigravity hero variant — dark green bg, no image */
+.hero-antigravity {
+  background: #071a0a;
+}
+
+.hero-antigravity-bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+.hero-antigravity-bg canvas {
+  width: 100% !important;
+  height: 100% !important;
+}
+
+.hero-antigravity .hero-inner,
+.hero-antigravity .orb,
+.hero-antigravity .hero-line,
+.hero-antigravity .scroll-cue {
+  position: relative;
+  z-index: 1;
+}
+
 .hero-bg {
   position: absolute;
   inset: 0;

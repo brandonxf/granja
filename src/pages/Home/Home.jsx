@@ -7,20 +7,18 @@ import SplitText from '../../components/SplitText/SplitText';
 import './Home.css';
 import heroVegetables from '../../assets/hero-vegetables.jpg';
 import GlobeCanvas from '../../components/GlobeCanvas/GlobeCanvas';
+import Antigravity from '../../components/Antigravity/Antigravity';
 
 export default function Home() {
   const { products } = useApp();
   const featuredProducts = products.slice(0, 4);
   const heroRef = useRef(null);
-  const spotlight1Ref = useRef(null);
-  const spotlight2Ref = useRef(null);
   const actionsRef = useRef(null);
   const statsRef = useRef(null);
   const globeRef = useRef(null);
   const [showGlobe, setShowGlobe] = useState(false);
 
   const handleTitleComplete = () => {
-    // Globe fades in after title finishes
     setTimeout(() => setShowGlobe(true), 100);
   };
 
@@ -28,26 +26,6 @@ export default function Home() {
     if (actionsRef.current) actionsRef.current.style.opacity = '1';
     if (statsRef.current) statsRef.current.style.opacity = '1';
   };
-
-  useEffect(() => {
-    const hero = heroRef.current;
-    if (!hero) return;
-    const handleMouseMove = (e) => {
-      const rect = hero.getBoundingClientRect();
-      const x = ((e.clientX - rect.left) / rect.width) * 100;
-      const y = ((e.clientY - rect.top) / rect.height) * 100;
-      if (spotlight1Ref.current) {
-        spotlight1Ref.current.style.left = `${x}%`;
-        spotlight1Ref.current.style.top = `${y}%`;
-      }
-      if (spotlight2Ref.current) {
-        spotlight2Ref.current.style.left = `${100 - x * 0.6}%`;
-        spotlight2Ref.current.style.top = `${100 - y * 0.6}%`;
-      }
-    };
-    hero.addEventListener('mousemove', handleMouseMove);
-    return () => hero.removeEventListener('mousemove', handleMouseMove);
-  }, []);
 
   const features = [
     { icon: <Leaf size={28} />, title: '100% Orgánico', description: 'Todos nuestros productos son cultivados sin pesticidas químicos.' },
@@ -58,16 +36,31 @@ export default function Home() {
 
   return (
     <main className="home">
-      <section className="hero" ref={heroRef}>
-        <div className="hero-bg" style={{ backgroundImage: `url(${heroVegetables})` }} />
-        <div className="hero-grain" />
+      <section className="hero hero-antigravity" ref={heroRef}>
+        <div className="hero-antigravity-bg">
+          <Antigravity
+            count={320}
+            magnetRadius={12}
+            ringRadius={8}
+            waveSpeed={0.5}
+            waveAmplitude={1.2}
+            particleSize={1.6}
+            lerpSpeed={0.06}
+            color="#4ade80"
+            autoAnimate
+            particleVariance={1}
+            rotationSpeed={0.05}
+            depthFactor={1}
+            pulseSpeed={2.5}
+            particleShape="capsule"
+            fieldStrength={10}
+          />
+        </div>
         <div className="orb orb-1" />
         <div className="orb orb-2" />
         <div className="orb orb-3" />
         <div className="hero-line hero-line-1" />
         <div className="hero-line hero-line-2" />
-        <div className="cursor-spotlight cursor-spotlight-1" ref={spotlight1Ref} />
-        <div className="cursor-spotlight cursor-spotlight-2" ref={spotlight2Ref} />
 
         <div className="hero-inner container">
           <div className="hero-text">

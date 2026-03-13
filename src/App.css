@@ -4,8 +4,11 @@
   min-height: 100vh;
 }
 
-main:not(.admin-main):not(.login-page) {
+main:not(.admin-main):not(.login-page):not(.about-page) {
   margin-top: 70px;
 }
 
+.about-page {
+  margin-top: 0;
+}
 

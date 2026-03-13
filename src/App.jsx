@@ -54,6 +54,7 @@ function AppContent() {
         </MainLayout>
       )}
       <Toast />
+      {!isAdminRoute && <WhatsAppButton />}
     </div>
   );
 }

@@ -208,12 +208,12 @@ export default function Home() {
             <div className="cta-bg-pattern" />
             <div className="cta-content">
               <span className="cta-tag">Únete a nosotros</span>
-              <h2 className="cta-title">¿Tienes una granja?</h2>
+              <h2 className="cta-title">Del campo a tu mesa</h2>
               <p className="cta-desc">
-                Ofrece tus productos en Manjares del Campo y llega a cientos de familias que valoran lo auténtico.
+                Creemos en alimentos reales, productores locales y sabores que respetan la tradición.
               </p>
-              <Link to="/contacto" className="cta-btn">
-                Contáctanos <ArrowRight size={18} />
+              <Link to="/nosotros" className="cta-btn">
+                Conoce nuestra historia → <ArrowRight size={18} />
               </Link>
             </div>
             <div className="cta-visual">

@@ -2,12 +2,13 @@ import { useState, useMemo } from 'react';
 import { Apple, Carrot, Milk, Egg, Beef, Sprout, Grid, Search, X, SlidersHorizontal, ArrowUpDown } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
 import ProductCard from '../../components/ProductCard/ProductCard';
+import ProductSkeletonGrid from '../../components/ProductSkeleton/ProductSkeleton';
 import './Products.css';
 
 const iconMap = { Apple, Carrot, Milk, Egg, Beef, Sprout, Grid };
 
 export default function Products() {
-  const { products, categories } = useApp();
+  const { products, categories, loading } = useApp();
   const [activeCategory, setActiveCategory] = useState('all');
   const [search, setSearch] = useState('');
   const [sortBy, setSortBy] = useState('default');
@@ -173,7 +174,9 @@ export default function Products() {
           {hasFilters && <span className="results-filtered"> · filtrado</span>}
         </div>
 
-        {filtered.length === 0 ? (
+        {loading ? (
+          <ProductSkeletonGrid count={8} />
+        ) : filtered.length === 0 ? (
           <div className="no-products">
             <Search size={40} opacity={0.2} />
             <p>No se encontraron productos</p>

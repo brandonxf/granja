@@ -2,6 +2,7 @@
 .about-page {
   min-height: 80vh;
   overflow-x: hidden;
+  background: #ffffff;
 }
 
 /* ── Hero ── */
@@ -29,6 +30,7 @@
 /* ── Content ── */
 .about-content {
   padding: 3rem 0;
+  background: #ffffff;
 }
 
 .about-grid {

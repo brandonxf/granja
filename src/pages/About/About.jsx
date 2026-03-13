@@ -1,9 +1,18 @@
 import { Leaf, Heart, TreePine, MapPin } from 'lucide-react';
-import GlobeCanvas from '../../components/GlobeCanvas/GlobeCanvas';
+import { useState, useEffect, lazy, Suspense } from 'react';
 import './About.css';
 import aboutFarm from '../../assets/about-farm.jpg';
 
+const GlobeCanvas = lazy(() => import('../../components/GlobeCanvas/GlobeCanvas'));
+
 export default function About() {
+  const [isDesktop, setIsDesktop] = useState(() => window.innerWidth >= 900);
+
+  useEffect(() => {
+    const check = () => setIsDesktop(window.innerWidth >= 900);
+    window.addEventListener('resize', check);
+    return () => window.removeEventListener('resize', check);
+  }, []);
   return (
     <main className="about-page">
       <section className="about-hero">
@@ -102,7 +111,11 @@ export default function About() {
             </div>
 
             <div className="location-globe">
-              <GlobeCanvas size={460} />
+              {isDesktop && (
+                <Suspense fallback={null}>
+                  <GlobeCanvas size={460} />
+                </Suspense>
+              )}
             </div>
           </div>
         </div>

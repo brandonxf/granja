@@ -220,3 +220,52 @@ export const ordersAPI = {
     return handleResponse(response);
   }
 };
+
+export const adminsAPI = {
+  getAll: async () => {
+    const token = getToken();
+    const r = await fetch(`${API_URL}/admins`, { headers: { 'Authorization': `Bearer ${token}` } });
+    return handleResponse(r);
+  },
+  getMe: async () => {
+    const token = getToken();
+    const r = await fetch(`${API_URL}/admins/me`, { headers: { 'Authorization': `Bearer ${token}` } });
+    return handleResponse(r);
+  },
+  updateMe: async (data) => {
+    const token = getToken();
+    const r = await fetch(`${API_URL}/admins/me`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+      body: JSON.stringify(data)
+    });
+    return handleResponse(r);
+  },
+  create: async (data) => {
+    const token = getToken();
+    const r = await fetch(`${API_URL}/admins`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+      body: JSON.stringify(data)
+    });
+    return handleResponse(r);
+  },
+  update: async (id, data) => {
+    const token = getToken();
+    const r = await fetch(`${API_URL}/admins/${id}`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+      body: JSON.stringify(data)
+    });
+    return handleResponse(r);
+  },
+  delete: async (id, reason) => {
+    const token = getToken();
+    const r = await fetch(`${API_URL}/admins/${id}`, {
+      method: 'DELETE',
+      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+      body: JSON.stringify({ reason })
+    });
+    return handleResponse(r);
+  }
+};

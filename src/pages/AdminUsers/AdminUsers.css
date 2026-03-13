@@ -1,0 +1,44 @@
+.role-badge {
+  display: inline-flex; align-items: center; gap: 4px;
+  padding: 3px 10px; border-radius: 999px;
+  font-size: 0.75rem; font-weight: 600;
+}
+.role-super_admin { background: rgba(45,90,39,0.12); color: #2D5A27; }
+.role-admin       { background: rgba(74,124,67,0.1);  color: #4A7C43; }
+
+.user-modal { max-width: 500px; padding: 0; overflow: hidden; }
+.user-modal-header {
+  display: flex; align-items: center; gap: 1rem;
+  padding: 1.5rem 1.75rem; background: linear-gradient(135deg, #f0f7ee, #e8f5e2);
+  border-bottom: 1px solid #d4edcc;
+}
+.user-avatar-lg {
+  width: 52px; height: 52px; border-radius: 50%;
+  background: linear-gradient(135deg, var(--primary-green), #4A7C43);
+  color: #fff; font-size: 1.4rem; font-weight: 700;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.user-modal .modal-title { margin: 0 0 0.3rem; font-size: 1.15rem; }
+.user-modal-body { padding: 1.25rem 1.75rem; }
+.user-modal .modal-actions { padding: 0.75rem 1.75rem 1.5rem; border-top: 1px solid #f0f0f0; }
+
+.user-info-grid { display: flex; flex-direction: column; gap: 0; }
+.info-row {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 0.6rem 0; border-bottom: 1px solid #f5f5f5; font-size: 0.9rem;
+}
+.info-row:last-child { border-bottom: none; }
+.info-label { color: #999; font-weight: 500; }
+.info-value { color: #2D5A27; font-weight: 600; text-align: right; }
+
+.user-form-error {
+  margin: 0 1.75rem 0.75rem;
+  padding: 0.65rem 1rem;
+  background: #fff5f5; color: #c53030;
+  border-radius: 8px; font-size: 0.85rem;
+  border: 1px solid #fed7d7;
+}
+.user-modal .product-form { padding: 1.25rem 1.75rem; }
+.user-modal .modal-actions { padding: 0 1.75rem 1.5rem; border-top: none; }
+.req { color: #e53e3e; }

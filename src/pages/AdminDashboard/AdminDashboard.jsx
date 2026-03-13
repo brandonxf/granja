@@ -3,13 +3,15 @@ import { useNavigate, Navigate } from 'react-router-dom';
 import {
   LayoutDashboard, Package, ShoppingCart, BarChart3,
   LogOut, Plus, Edit, Trash2, Users, DollarSign, Image,
-  TrendingUp, Clock, CheckCircle, XCircle, Eye, Menu, X
+  TrendingUp, Clock, CheckCircle, XCircle, Eye, Menu, X, UserCircle
 } from 'lucide-react';
 import {
   BarChart, Bar, LineChart, Line, PieChart, Pie, Cell,
   XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend
 } from 'recharts';
 import { useApp } from '../../context/AppContext';
+import AdminUsers from '../AdminUsers/AdminUsers';
+import AdminProfile from '../AdminProfile/AdminProfile';
 import { uploadAPI, ordersAPI } from '../../api/client';
 import './AdminDashboard.css';
 import logoImg from '../../assets/logo.png';
@@ -108,6 +110,8 @@ export default function AdminDashboard() {
     { id: 'products',  icon: Package,         label: 'Productos' },
     { id: 'orders',    icon: ShoppingCart,     label: 'Pedidos' },
     { id: 'stats',     icon: BarChart3,        label: 'Estadísticas' },
+    { id: 'users',     icon: Users,            label: 'Usuarios' },
+    { id: 'profile',   icon: UserCircle,       label: 'Mi Perfil' },
   ];
 
   const kpis = [
@@ -358,6 +362,12 @@ export default function AdminDashboard() {
             </div>
           </div>
         )}
+        {/* ── Users ── */}
+        {activeSection === 'users' && <AdminUsers currentAdmin={admin} />}
+
+        {/* ── Profile ── */}
+        {activeSection === 'profile' && <AdminProfile />}
+
       </main>
 
       {orderModal && (

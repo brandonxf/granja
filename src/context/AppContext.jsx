@@ -140,9 +140,14 @@ export function AppProvider({ children }) {
     try {
       const data = await authAPI.login(email, password);
       const adminData = { 
-        email: data.admin.email, 
-        name: data.admin.name, 
-        token: data.token 
+        id: data.admin.id,
+        email: data.admin.email,
+        name: data.admin.name,
+        last_name: data.admin.last_name || '',
+        phone: data.admin.phone || '',
+        role: data.admin.role || 'admin',
+        created_at: data.admin.created_at,
+        token: data.token
       };
       localStorage.setItem('adminToken', data.token);
       setAdmin(adminData);
@@ -223,6 +228,7 @@ export function AppProvider({ children }) {
     
     // Admin
     admin,
+    setAdmin,
     loginAdmin,
     logoutAdmin,
     

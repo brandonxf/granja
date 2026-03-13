@@ -80,8 +80,14 @@ export async function initDatabase() {
       )
     `);
 
-    // Migración: agregar cancel_reason si no existe
-    await pool.query(`ALTER TABLE orders ADD COLUMN IF NOT EXISTS cancel_reason TEXT`);
+    // Migraciones
+    await pool.query('ALTER TABLE orders ADD COLUMN IF NOT EXISTS cancel_reason TEXT');
+    await pool.query("ALTER TABLE admins ADD COLUMN IF NOT EXISTS last_name VARCHAR(255) DEFAULT ''");
+    await pool.query("ALTER TABLE admins ADD COLUMN IF NOT EXISTS phone VARCHAR(20) DEFAULT ''");
+    await pool.query("ALTER TABLE admins ADD COLUMN IF NOT EXISTS role VARCHAR(50) DEFAULT 'admin'");
+    await pool.query("ALTER TABLE admins ADD COLUMN IF NOT EXISTS cancel_reason TEXT");
+    // Super admin para id=1
+    await pool.query("UPDATE admins SET role='super_admin' WHERE id=1 AND (role IS NULL OR role='admin')");
 
     // Verificar si existe un admin por defecto
     const adminExists = await pool.query('SELECT * FROM admins LIMIT 1');

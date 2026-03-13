@@ -7,6 +7,7 @@ import productRoutes from './routes/products.js';
 import authRoutes from './routes/auth.js';
 import uploadRoutes from './routes/upload.js';
 import orderRoutes from './routes/orders.js';
+import adminRoutes from './routes/admins.js';
 import { initDatabase } from './config/db.js';
 
 dotenv.config();
@@ -33,6 +34,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/products', productRoutes);
 app.use('/api/upload', uploadRoutes);
 app.use('/api/orders', orderRoutes);
+app.use('/api/admins', adminRoutes);
 
 // Endpoint de prueba
 app.get('/api/health', (req, res) => {

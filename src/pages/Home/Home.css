@@ -20,14 +20,30 @@
   position: absolute;
   inset: 0;
   z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.hero-antigravity-bg > div {
+  position: absolute !important;
+  inset: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  pointer-events: none !important;
 }
 
 .hero-antigravity-bg canvas {
+  display: block;
   width: 100% !important;
   height: 100% !important;
+  pointer-events: none !important;
 }
 
-.hero-antigravity .hero-inner,
+.hero-antigravity .hero-inner {
+  position: relative;
+  z-index: 2;
+}
+
 .hero-antigravity .orb,
 .hero-antigravity .hero-line,
 .hero-antigravity .scroll-cue {

@@ -21,8 +21,8 @@ const COLORS = [GREEN, LIGHT, GOLD, '#4A7C43', '#a3e635', '#86efac'];
 const getImageUrl = (url) => { if (!url) return ''; if (url.startsWith('http')) return url; return ''; };
 const fmt = (n) => `$${Number(n).toLocaleString('es-CO')}`;
 
-const STATUS_LABELS = { pendiente: 'Pendiente', confirmado: 'Confirmado', enviado: 'Enviado', entregado: 'Entregado', cancelado: 'Cancelado' };
-const STATUS_NEXT  = { pendiente: 'confirmado', confirmado: 'enviado', enviado: 'entregado' };
+const STATUS_LABELS = { pendiente: 'Pendiente', confirmado: 'Confirmado', en_camino: 'En camino', entregado: 'Entregado', cancelado: 'Cancelado' };
+const STATUS_NEXT  = { pendiente: 'confirmado', confirmado: 'en_camino', en_camino: 'entregado' };
 
 export default function AdminDashboard() {
   const { admin, logoutAdmin, products, orders, setOrders, addProduct, updateProduct, deleteProduct } = useApp();

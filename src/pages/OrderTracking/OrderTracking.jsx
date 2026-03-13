@@ -7,13 +7,13 @@ import './OrderTracking.css';
 const PHONE = '573154143417';
 
 const STEPS = [
-  { key: 'pendiente',   label: 'Pedido recibido',   icon: Clock,         desc: 'Hemos recibido tu pedido y lo estamos revisando.' },
-  { key: 'confirmado',  label: 'Confirmado',          icon: Package,       desc: 'Tu pedido fue confirmado y está siendo preparado.' },
-  { key: 'enviado',     label: 'En camino',           icon: Truck,         desc: 'Tu pedido está en camino hacia ti.' },
-  { key: 'entregado',   label: 'Entregado',           icon: CheckCircle,   desc: '¡Tu pedido fue entregado exitosamente!' },
+  { key: 'pendiente',  label: 'Pedido recibido', icon: Clock,        desc: 'Hemos recibido tu pedido y lo estamos revisando.' },
+  { key: 'confirmado', label: 'Confirmado',        icon: Package,      desc: 'Tu pedido fue confirmado y está siendo preparado.' },
+  { key: 'en_camino',  label: 'En camino',         icon: Truck,        desc: 'Tu pedido está en camino hacia ti.' },
+  { key: 'entregado',  label: 'Entregado',         icon: CheckCircle,  desc: '¡Tu pedido fue entregado exitosamente!' },
 ];
 
-const STATUS_INDEX = { pendiente: 0, confirmado: 1, enviado: 2, entregado: 3 };
+const STATUS_INDEX = { pendiente: 0, confirmado: 1, en_camino: 2, entregado: 3 };
 
 const fmt = (n) => `$${Number(n).toLocaleString('es-CO')}`;
 

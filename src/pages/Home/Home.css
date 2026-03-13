@@ -282,15 +282,22 @@
   font-family: 'Fraunces', serif;
   font-size: 1.8rem;
   font-weight: 700;
-  color: #7ec87a;
+  color: #ffffff;
   line-height: 1;
 }
 
 .stat-label {
   font-size: 0.72rem;
   letter-spacing: 0.5px;
-  color: rgba(168, 230, 163, 0.75);
-  text-transform: uppercase;
+  color: #ffffff;
+  text-transform: none;
+}
+
+/* Forzar color blanco en estados donde otras reglas puedan sobreescribirlo */
+.hero-stats .stat-label,
+.hero-stats .stat-num {
+  color: #ffffff !important;
+  opacity: 1 !important;
 }
 
 .hero-stat-divider {

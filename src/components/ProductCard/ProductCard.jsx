@@ -5,7 +5,7 @@ import { useApp } from '../../context/AppContext';
 import './ProductCard.css';
 
 export default function ProductCard({ product, index = 0 }) {
-  const { addToCart } = useApp();
+  const { addToCart, products } = useApp();
   const [modalOpen, setModalOpen] = useState(false);
   const [qty, setQty] = useState(1);
 
@@ -20,6 +20,10 @@ export default function ProductCard({ product, index = 0 }) {
   };
 
   const imageUrl = getImageUrl(product.image_url);
+
+  const related = (products || [])
+    .filter(p => p.id !== product.id && p.category_id === product.category_id)
+    .slice(0, 3);
 
   const openModal = (e) => {
     e?.stopPropagation();
@@ -84,7 +88,7 @@ export default function ProductCard({ product, index = 0 }) {
             {product.organic && (
               <div className="product-meta-item">
                 <span className="meta-label">Tipo</span>
-                <span className="meta-value in-stock">🌿 Orgánico</span>
+                <span className="meta-value in-stock">Organico</span>
               </div>
             )}
           </div>
@@ -103,6 +107,37 @@ export default function ProductCard({ product, index = 0 }) {
               </button>
             </div>
           </div>
+
+          {/* Related products */}
+          {related.length > 0 && (
+            <div className="modal-related">
+              <p className="modal-related-title">Productos relacionados</p>
+              <div className="modal-related-grid">
+                {related.map(p => {
+                  const relImg = getImageUrl(p.image_url);
+                  return (
+                    <button key={p.id} className="modal-related-card" onClick={() => {
+                      closeModal();
+                      setTimeout(() => {
+                        const el = document.getElementById(`product-${p.id}`);
+                        el?.click();
+                      }, 150);
+                    }}>
+                      <div className="modal-related-img">
+                        {relImg
+                          ? <img src={relImg} alt={p.name} />
+                          : <Image size={20} opacity={0.2} />}
+                      </div>
+                      <div className="modal-related-info">
+                        <span className="modal-related-name">{p.name}</span>
+                        <span className="modal-related-price">{formatPrice(p.price)}</span>
+                      </div>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </div>,
@@ -112,6 +147,7 @@ export default function ProductCard({ product, index = 0 }) {
   return (
     <>
       <div
+        id={`product-${product.id}`}
         className="product-card fade-in"
         style={{ animationDelay: `${index * 0.07}s` }}
         onClick={openModal}

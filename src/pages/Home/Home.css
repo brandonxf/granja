@@ -14,8 +14,23 @@
 .hero-bg {
   position: absolute;
   inset: 0;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+/* Dark green gradient overlay on top of the image */
+.hero-bg::after {
+  content: '';
+  position: absolute;
+  inset: 0;
   background:
-    linear-gradient(160deg, #0d2410 0%, #1a3a17 40%, #0f2a0c 70%, #071a06 100%);
+    linear-gradient(160deg,
+      rgba(7,26,6,0.92) 0%,
+      rgba(13,36,16,0.85) 30%,
+      rgba(26,58,23,0.78) 60%,
+      rgba(7,26,6,0.88) 100%
+    );
 }
 
 /* Noise grain texture */

@@ -4,6 +4,7 @@ import { ArrowRight, Truck, Leaf, Heart, Award } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
 import ProductCard from '../../components/ProductCard/ProductCard';
 import './Home.css';
+import heroVegetables from '../../assets/hero-vegetables.jpg';
 import GlobeCanvas from '../../components/GlobeCanvas/GlobeCanvas';
 
 export default function Home() {
@@ -92,7 +93,7 @@ export default function Home() {
     <main className="home">
 
       <section className="hero" ref={heroRef}>
-        <div className="hero-bg" />
+        <div className="hero-bg" style={{ backgroundImage: `url(${heroVegetables})` }} />
         <div className="hero-grain" />
         <div className="orb orb-1" />
         <div className="orb orb-2" />

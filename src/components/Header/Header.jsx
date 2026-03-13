@@ -12,6 +12,7 @@ export default function Header() {
   const location = useLocation();
   const indicatorRef = useRef(null);
   const navRef = useRef(null);
+  const isFirstRender = useRef(true);
 
   const navLinks = [
     { path: '/', label: 'Inicio' },
@@ -28,17 +29,37 @@ export default function Header() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  useEffect(() => {
+  const updateIndicator = () => {
     if (!navRef.current || !indicatorRef.current) return;
     const activeLink = navRef.current.querySelector('.nav-link-active');
     if (activeLink) {
       const { offsetLeft, offsetWidth } = activeLink;
+      if (isFirstRender.current) {
+        indicatorRef.current.classList.add('no-transition');
+        isFirstRender.current = false;
+      } else {
+        indicatorRef.current.classList.remove('no-transition');
+      }
       indicatorRef.current.style.left = `${offsetLeft}px`;
       indicatorRef.current.style.width = `${offsetWidth}px`;
       indicatorRef.current.style.opacity = '1';
     } else {
       indicatorRef.current.style.opacity = '0';
     }
+  };
+
+  useEffect(() => {
+    // Double RAF ensures DOM is fully painted before measuring
+    let raf1, raf2;
+    raf1 = requestAnimationFrame(() => {
+      raf2 = requestAnimationFrame(() => {
+        updateIndicator();
+      });
+    });
+    return () => {
+      cancelAnimationFrame(raf1);
+      cancelAnimationFrame(raf2);
+    };
   }, [location.pathname]);
 
   const isCartPage = location.pathname === '/carrito';

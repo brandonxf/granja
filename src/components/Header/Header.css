@@ -95,6 +95,10 @@
   pointer-events: none;
 }
 
+.nav-indicator.no-transition {
+  transition: none !important;
+}
+
 .nav-link {
   padding: 8px 18px;
   font-family: 'DM Sans', sans-serif;

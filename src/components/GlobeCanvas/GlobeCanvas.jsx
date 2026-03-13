@@ -123,6 +123,41 @@ export default function GlobeCanvas({ size = 480 }) {
       ctx.lineWidth = 0.7;
       ctx.stroke();
 
+      // Colombia marker
+      const colProj = projection(COLOMBIA);
+      if (colProj) {
+        const [cx, cy] = colProj;
+        const visible = d3.geoDistance(COLOMBIA, [-rotation[0], -rotation[1]]) < Math.PI / 2;
+        if (visible) {
+          // Outer pulse ring
+          const pSize = 6 + Math.sin(pulse) * 4;
+          const pAlpha = 0.6 - Math.sin(pulse) * 0.3;
+          ctx.beginPath();
+          ctx.arc(cx, cy, pSize, 0, 2 * Math.PI);
+          ctx.strokeStyle = `rgba(255,220,50,${pAlpha})`;
+          ctx.lineWidth = 1.5;
+          ctx.stroke();
+
+          // Second ring
+          const pSize2 = 10 + Math.sin(pulse) * 5;
+          const pAlpha2 = 0.3 - Math.sin(pulse) * 0.2;
+          ctx.beginPath();
+          ctx.arc(cx, cy, pSize2, 0, 2 * Math.PI);
+          ctx.strokeStyle = `rgba(255,220,50,${Math.max(0, pAlpha2)})`;
+          ctx.lineWidth = 1;
+          ctx.stroke();
+
+          // Core dot
+          ctx.beginPath();
+          ctx.arc(cx, cy, 4, 0, 2 * Math.PI);
+          ctx.fillStyle = '#FFD700';
+          ctx.fill();
+          ctx.strokeStyle = 'rgba(255,255,255,0.8)';
+          ctx.lineWidth = 1.2;
+          ctx.stroke();
+        }
+      }
+
       // Dots with depth-based brightness
       allDots.forEach(([lng, lat]) => {
         const projected = projection([lng, lat]);
@@ -156,13 +191,18 @@ export default function GlobeCanvas({ size = 480 }) {
       }
     };
 
+    // Colombia coordinates
+    const COLOMBIA = [-74.0, 4.5];
+    let pulse = 0;
+
     let autoRotate = true;
     const timer = d3.timer(() => {
+      pulse += 0.06;
       if (autoRotate) {
         rotation[0] += 0.25;
         projection.rotate(rotation);
-        render();
       }
+      render();
     });
 
     const onMouseDown = (e) => {

@@ -11,46 +11,6 @@
   padding-top: 72px;
 }
 
-/* Antigravity hero variant — dark green bg, no image */
-.hero-antigravity {
-  background: #071a0a;
-}
-
-.hero-antigravity-bg {
-  position: absolute;
-  inset: 0;
-  z-index: 0;
-  pointer-events: none;
-  overflow: hidden;
-}
-
-.hero-antigravity-bg > div {
-  position: absolute !important;
-  inset: 0 !important;
-  width: 100% !important;
-  height: 100% !important;
-  pointer-events: none !important;
-}
-
-.hero-antigravity-bg canvas {
-  display: block;
-  width: 100% !important;
-  height: 100% !important;
-  pointer-events: none !important;
-}
-
-.hero-antigravity .hero-inner {
-  position: relative;
-  z-index: 2;
-}
-
-.hero-antigravity .orb,
-.hero-antigravity .hero-line,
-.hero-antigravity .scroll-cue {
-  position: relative;
-  z-index: 1;
-}
-
 .hero-bg {
   position: absolute;
   inset: 0;
@@ -220,24 +180,6 @@
   gap: 0;
   margin-bottom: 1.5rem;
   line-height: 0.95;
-}
-
-/* SplitText renders inline-block — force block inside title */
-.hero-title .split-parent {
-  display: block !important;
-  overflow: visible !important;
-}
-
-/* SplitText in eyebrow and desc stay inline */
-.hero-eyebrow .split-parent {
-  display: inline !important;
-  overflow: visible !important;
-}
-
-.hero-desc .split-parent {
-  display: block !important;
-  overflow: visible !important;
-  text-align: left !important;
 }
 
 .hero-title-top {

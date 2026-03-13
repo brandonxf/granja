@@ -6,6 +6,7 @@ import { fileURLToPath } from 'url';
 import productRoutes from './routes/products.js';
 import authRoutes from './routes/auth.js';
 import uploadRoutes from './routes/upload.js';
+import orderRoutes from './routes/orders.js';
 import { initDatabase } from './config/db.js';
 
 dotenv.config();
@@ -31,6 +32,7 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 app.use('/api/auth', authRoutes);
 app.use('/api/products', productRoutes);
 app.use('/api/upload', uploadRoutes);
+app.use('/api/orders', orderRoutes);
 
 // Endpoint de prueba
 app.get('/api/health', (req, res) => {

@@ -172,3 +172,42 @@ export const uploadAPI = {
 };
 
 export default API_URL;
+
+// API de Pedidos
+export const ordersAPI = {
+  create: async (orderData) => {
+    const response = await fetch(`${API_URL}/orders`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(orderData)
+    });
+    return handleResponse(response);
+  },
+  getById: async (id) => {
+    const response = await fetch(`${API_URL}/orders/${id}`);
+    return handleResponse(response);
+  },
+  getAll: async () => {
+    const token = getToken();
+    const response = await fetch(`${API_URL}/orders`, {
+      headers: { 'Authorization': `Bearer ${token}` }
+    });
+    return handleResponse(response);
+  },
+  updateStatus: async (id, status) => {
+    const token = getToken();
+    const response = await fetch(`${API_URL}/orders/${id}/status`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+      body: JSON.stringify({ status })
+    });
+    return handleResponse(response);
+  },
+  getStats: async () => {
+    const token = getToken();
+    const response = await fetch(`${API_URL}/orders/stats/summary`, {
+      headers: { 'Authorization': `Bearer ${token}` }
+    });
+    return handleResponse(response);
+  }
+};

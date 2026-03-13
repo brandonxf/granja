@@ -8,6 +8,7 @@ import Products from './pages/Products/Products';
 import Cart from './pages/Cart/Cart';
 import About from './pages/About/About';
 import Contact from './pages/Contact/Contact';
+import OrderTracking from './pages/OrderTracking/OrderTracking';
 import AdminLogin from './pages/AdminLogin/AdminLogin';
 import AdminDashboard from './pages/AdminDashboard/AdminDashboard';
 import WhatsAppButton from './components/WhatsAppButton/WhatsAppButton';
@@ -50,6 +51,8 @@ function AppContent() {
             <Route path="/carrito" element={<Cart />} />
             <Route path="/nosotros" element={<About />} />
             <Route path="/contacto" element={<Contact />} />
+            <Route path="/pedido" element={<OrderTracking />} />
+            <Route path="/pedido/:id" element={<OrderTracking />} />
           </Routes>
         </MainLayout>
       )}

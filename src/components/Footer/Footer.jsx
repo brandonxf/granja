@@ -38,6 +38,7 @@ export default function Footer() {
               <Link to="/productos" className="footer-link">Productos</Link>
               <Link to="/nosotros" className="footer-link">Nosotros</Link>
               <Link to="/contacto" className="footer-link">Contacto</Link>
+              <Link to="/pedido" className="footer-link">Seguimiento de pedido</Link>
             </nav>
           </div>
 

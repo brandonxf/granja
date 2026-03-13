@@ -71,7 +71,7 @@ export default function About() {
             <MapPin className="location-pin-icon" />
             <h2 className="location-title">¿Dónde estamos?</h2>
             <p className="location-subtitle">
-              Estamos ubicados en Dibulla, La Guajira, Colombia — en el corazón de una de las regiones más fértiles del Caribe colombiano.
+              Estamos ubicados en Barranquilla, Atlántico, Colombia — en el corazón de la capital del Caribe colombiano.
             </p>
           </div>
 
@@ -79,11 +79,11 @@ export default function About() {
             <div className="location-info">
               <div className="location-detail">
                 <span className="location-label">Región</span>
-                <span className="location-value">La Guajira, Colombia</span>
+                <span className="location-value">Atlántico, Colombia</span>
               </div>
               <div className="location-detail">
                 <span className="location-label">Municipio</span>
-                <span className="location-value">Dibulla</span>
+                <span className="location-value">Barranquilla</span>
               </div>
               <div className="location-detail">
                 <span className="location-label">Zona</span>
@@ -94,9 +94,10 @@ export default function About() {
                 <span className="location-value">Tropical, ideal para cultivos orgánicos</span>
               </div>
               <p className="location-desc">
-                Nuestra granja se beneficia del clima cálido y húmedo del Caribe, los suelos ricos en minerales 
-                de la Sierra Nevada de Santa Marta y las aguas limpias de los ríos de La Guajira. 
-                Estas condiciones únicas son las que le dan a nuestros productos su sabor inigualable.
+                Desde Barranquilla, la capital del Caribe colombiano, llevamos productos 
+                frescos y orgánicos directamente a tu mesa. La riqueza agrícola de la región 
+                Caribe, con su clima cálido y sus suelos fértiles, nos permite ofrecer 
+                frutas y verduras de la más alta calidad durante todo el año.
               </p>
             </div>
 

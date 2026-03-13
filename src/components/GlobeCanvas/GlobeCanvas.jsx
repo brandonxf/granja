@@ -191,8 +191,8 @@ export default function GlobeCanvas({ size = 480 }) {
       }
     };
 
-    // Colombia coordinates
-    const COLOMBIA = [-74.8, 11.0];
+    // Barranquilla coordinates
+    const COLOMBIA = [-74.796, 10.979];
     let pulse = 0;
 
     let autoRotate = true;

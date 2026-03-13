@@ -421,6 +421,40 @@
   .product-modal-body { padding: 1.25rem; }
 }
 
+@media (max-width: 640px) {
+  .product-card {
+    border-radius: 10px;
+  }
+  .product-content {
+    padding: 0.55rem 0.65rem 0.65rem;
+  }
+  .product-name {
+    font-size: 0.82rem;
+    margin-bottom: 2px;
+  }
+  .product-description {
+    display: none;
+  }
+  .product-category {
+    font-size: 0.55rem;
+    margin-bottom: 3px;
+  }
+  .product-price {
+    font-size: 0.95rem;
+  }
+  .add-to-cart-button {
+    padding: 5px 10px;
+    font-size: 0.68rem;
+    border-radius: 14px;
+  }
+  .product-badge {
+    font-size: 0.5rem;
+    padding: 3px 7px;
+    top: 7px;
+    left: 7px;
+  }
+}
+
 /* ── Related products ─────────────────────────────────── */
 .modal-related {
   margin-top: 1.25rem;

@@ -618,7 +618,7 @@
   .feature-card { padding: 1.2rem; }
 
   .featured-products { padding: 3rem 0; }
-  .products-grid { grid-template-columns: 1fr 1fr; gap: 1rem; }
+  .products-grid { grid-template-columns: 1fr 1fr; gap: 0.6rem; }
 
   .cta-section { padding: 3rem 0; }
   .cta-card { grid-template-columns: 1fr; padding: 2rem 1.5rem; }

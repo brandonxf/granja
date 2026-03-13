@@ -163,3 +163,9 @@
   .contact-title { font-size: 2rem; }
   .contact-content { padding: var(--space-8) 0; }
 }
+
+@media (max-width: 768px) {
+  .contact-hero {
+    padding-top: 100px !important;
+  }
+}

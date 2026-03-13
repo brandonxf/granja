@@ -1,8 +1,9 @@
 import { Link } from 'react-router-dom';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import { ArrowRight, Truck, Leaf, Heart, Award } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
 import ProductCard from '../../components/ProductCard/ProductCard';
+import SplitText from '../../components/SplitText/SplitText';
 import './Home.css';
 import heroVegetables from '../../assets/hero-vegetables.jpg';
 import GlobeCanvas from '../../components/GlobeCanvas/GlobeCanvas';
@@ -10,64 +11,24 @@ import GlobeCanvas from '../../components/GlobeCanvas/GlobeCanvas';
 export default function Home() {
   const { products } = useApp();
   const featuredProducts = products.slice(0, 4);
-  const isMobile = typeof window !== 'undefined' && window.innerWidth <= 768;
   const heroRef = useRef(null);
   const spotlight1Ref = useRef(null);
   const spotlight2Ref = useRef(null);
+  const actionsRef = useRef(null);
+  const statsRef = useRef(null);
 
-  // Typewriter state
-  const lines = [
-    { id: 'eyebrow', text: 'Directo del campo a tu mesa', speed: 32 },
-    { id: 'title1', text: 'Manjares', speed: 60 },
-    { id: 'title2', text: 'del Campo', speed: 55 },
-    { id: 'desc', text: 'Sabores auténticos, cultivados con pasión y respeto por la tierra.\nPorque lo natural siempre es mejor.', speed: 18 },
-  ];
-  const [typed, setTyped] = useState({});
-  const [done, setDone] = useState({});
-  const [active, setActive] = useState(null);
-
-  useEffect(() => {
-    // On mobile, show all text instantly — no animation for performance
-    if (isMobile) {
-      const instant = {};
-      const doneAll = {};
-      lines.forEach(({ id, text }) => { instant[id] = text; doneAll[id] = true; });
-      setTyped(instant);
-      setDone(doneAll);
-      return;
-    }
-
-    let lineIndex = 0;
-    const typeNext = () => {
-      if (lineIndex >= lines.length) { setActive(null); return; }
-      const { id, text, speed } = lines[lineIndex];
-      setActive(id);
-      let i = 0;
-      const interval = setInterval(() => {
-        i++;
-        setTyped(prev => ({ ...prev, [id]: text.slice(0, i) }));
-        if (i >= text.length) {
-          clearInterval(interval);
-          setDone(prev => ({ ...prev, [id]: true }));
-          setActive(null);
-          lineIndex++;
-          setTimeout(typeNext, 120);
-        }
-      }, speed);
-    };
-    const t = setTimeout(typeNext, 300);
-    return () => clearTimeout(t);
-  }, []);
+  const handleDescComplete = () => {
+    if (actionsRef.current) actionsRef.current.style.opacity = '1';
+    if (statsRef.current) statsRef.current.style.opacity = '1';
+  };
 
   useEffect(() => {
     const hero = heroRef.current;
     if (!hero) return;
-
     const handleMouseMove = (e) => {
       const rect = hero.getBoundingClientRect();
       const x = ((e.clientX - rect.left) / rect.width) * 100;
       const y = ((e.clientY - rect.top) / rect.height) * 100;
-
       if (spotlight1Ref.current) {
         spotlight1Ref.current.style.left = `${x}%`;
         spotlight1Ref.current.style.top = `${y}%`;
@@ -77,7 +38,6 @@ export default function Home() {
         spotlight2Ref.current.style.top = `${100 - y * 0.6}%`;
       }
     };
-
     hero.addEventListener('mousemove', handleMouseMove);
     return () => hero.removeEventListener('mousemove', handleMouseMove);
   }, []);
@@ -91,7 +51,6 @@ export default function Home() {
 
   return (
     <main className="home">
-
       <section className="hero" ref={heroRef}>
         <div className="hero-bg" style={{ backgroundImage: `url(${heroVegetables})` }} />
         <div className="hero-grain" />
@@ -105,37 +64,103 @@ export default function Home() {
 
         <div className="hero-inner container">
           <div className="hero-text">
-          <div className="hero-eyebrow">
-            <span className="eyebrow-dot" />
-            <span className={done.eyebrow ? 'done' : active === 'eyebrow' ? 'typing' : 'pending'}>{typed.eyebrow || '\u00a0'}</span>
+
+            {/* Eyebrow */}
+            <div className="hero-eyebrow">
+              <span className="eyebrow-dot" />
+              <SplitText
+                text="Directo del campo a tu mesa"
+                tag="span"
+                splitType="chars"
+                delay={22}
+                duration={0.6}
+                ease="power2.out"
+                from={{ opacity: 0, y: 18 }}
+                to={{ opacity: 1, y: 0 }}
+                threshold={0}
+                rootMargin="0px"
+                textAlign="left"
+              />
+            </div>
+
+            {/* Title */}
+            <h1 className="hero-title">
+              <SplitText
+                text="Manjares"
+                tag="span"
+                className="hero-title-top"
+                splitType="chars"
+                delay={60}
+                duration={1.2}
+                ease="power3.out"
+                from={{ opacity: 0, y: 80 }}
+                to={{ opacity: 1, y: 0 }}
+                threshold={0}
+                rootMargin="0px"
+                textAlign="left"
+              />
+              <SplitText
+                text="del Campo"
+                tag="span"
+                className="hero-title-bottom"
+                splitType="chars"
+                delay={55}
+                duration={1.2}
+                ease="power3.out"
+                from={{ opacity: 0, y: 80 }}
+                to={{ opacity: 1, y: 0 }}
+                threshold={0}
+                rootMargin="0px"
+                textAlign="left"
+              />
+            </h1>
+
+            {/* Description */}
+            <div className="hero-desc">
+              <SplitText
+                text="Sabores auténticos, cultivados con pasión y respeto por la tierra. Porque lo natural siempre es mejor."
+                tag="p"
+                splitType="words"
+                delay={28}
+                duration={0.85}
+                ease="power2.out"
+                from={{ opacity: 0, y: 24 }}
+                to={{ opacity: 1, y: 0 }}
+                threshold={0}
+                rootMargin="0px"
+                textAlign="left"
+                onLetterAnimationComplete={handleDescComplete}
+              />
+            </div>
+
+            <div
+              ref={actionsRef}
+              className="hero-actions"
+              style={{ opacity: 0, transition: 'opacity 0.8s ease' }}
+            >
+              <Link to="/productos" className="hero-btn-primary">
+                Explorar productos <ArrowRight size={18} strokeWidth={2.5} />
+              </Link>
+              <Link to="/nosotros" className="hero-btn-ghost">Nuestra historia</Link>
+            </div>
+
+            <div
+              ref={statsRef}
+              className="hero-stats"
+              style={{ opacity: 0, transition: 'opacity 0.8s ease 0.25s' }}
+            >
+              <div className="hero-stat"><span className="stat-num">15+</span><span className="stat-label">Años de experiencia</span></div>
+              <div className="hero-stat-divider" />
+              <div className="hero-stat"><span className="stat-num">100%</span><span className="stat-label">Orgánico certificado</span></div>
+              <div className="hero-stat-divider" />
+              <div className="hero-stat"><span className="stat-num">500+</span><span className="stat-label">Familias satisfechas</span></div>
+            </div>
           </div>
-          <h1 className="hero-title">
-            <span className={`hero-title-top ${done.title1 ? 'done' : active === 'title1' ? 'typing' : 'pending'}`}>{typed.title1 || '\u00a0'}</span>
-            <span className={`hero-title-bottom ${done.title2 ? 'done' : active === 'title2' ? 'typing' : 'pending'}`}>{typed.title2 || '\u00a0'}</span>
-          </h1>
-          <p className={`hero-desc ${done.desc ? 'done' : active === 'desc' ? 'typing' : 'pending'}`}>
-            {(typed.desc || '').split('\n').map((line, i) => (
-              <span key={i}>{line}{i === 0 && <br />}</span>
-            ))}
-          </p>
-          <div className="hero-actions" style={{ opacity: isMobile || (typed.desc && typed.desc.length > 10) ? 1 : 0, transition: 'opacity 0.8s ease' }}>
-            <Link to="/productos" className="hero-btn-primary">
-              Explorar productos <ArrowRight size={18} strokeWidth={2.5} />
-            </Link>
-            <Link to="/nosotros" className="hero-btn-ghost">Nuestra historia</Link>
-          </div>
-          <div className="hero-stats" style={{ opacity: isMobile || (typed.desc && typed.desc.length > 30) ? 1 : 0, transition: 'opacity 0.8s ease 0.3s' }}>
-            <div className="hero-stat"><span className="stat-num">15+</span><span className="stat-label">Años de experiencia</span></div>
-            <div className="hero-stat-divider" />
-            <div className="hero-stat"><span className="stat-num">100%</span><span className="stat-label">Orgánico certificado</span></div>
-            <div className="hero-stat-divider" />
-            <div className="hero-stat"><span className="stat-num">500+</span><span className="stat-label">Familias satisfechas</span></div>
-          </div>
-          </div>
+
           <div className="hero-globe fade-in" style={{ animationDelay: '0.5s' }}>
             <GlobeCanvas size={560} />
           </div>
-        </div>{/* hero-inner */}
+        </div>
 
         <div className="scroll-cue">
           <div className="scroll-track"><div className="scroll-thumb" /></div>
@@ -202,7 +227,6 @@ export default function Home() {
           </div>
         </div>
       </section>
-
     </main>
   );
 }

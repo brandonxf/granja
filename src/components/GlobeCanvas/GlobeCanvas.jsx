@@ -1,10 +1,86 @@
 import { useEffect, useRef, useState } from 'react';
 import './GlobeCanvas.css';
-import treeImg from '../../assets/tree.png';
+
+function generateTreePoints() {
+  const points = [];
+
+  // ── Trunk (cylinder) ─────────────────────────────────
+  const trunkH = 1.2;
+  const trunkR = 0.08;
+  for (let i = 0; i < 800; i++) {
+    const theta = Math.random() * Math.PI * 2;
+    const y = -1.4 + Math.random() * trunkH;
+    const r = trunkR * (1 + (y + 1.4) * 0.15); // slightly wider at base
+    points.push({
+      x: Math.cos(theta) * r,
+      y,
+      z: Math.sin(theta) * r,
+      type: 'trunk'
+    });
+  }
+
+  // ── Main canopy (large sphere) ────────────────────────
+  const canopyR = 1.0;
+  const canopyY = 0.3;
+  for (let i = 0; i < 4000; i++) {
+    const u = Math.random();
+    const v = Math.random();
+    const theta = 2 * Math.PI * u;
+    const phi = Math.acos(2 * v - 1);
+    const r = canopyR * (0.85 + Math.random() * 0.15);
+    const x = r * Math.sin(phi) * Math.cos(theta);
+    const y = canopyY + r * Math.sin(phi) * Math.sin(theta) * 0.85;
+    const z = r * Math.cos(phi);
+    if (y < -0.2) continue; // cut bottom of canopy
+    points.push({ x, y, z, type: 'leaf' });
+  }
+
+  // ── Secondary cluster (left bulge) ───────────────────
+  for (let i = 0; i < 1200; i++) {
+    const theta = Math.random() * Math.PI * 2;
+    const phi = Math.acos(2 * Math.random() - 1);
+    const r = 0.6 * (0.85 + Math.random() * 0.15);
+    points.push({
+      x: -0.75 + r * Math.sin(phi) * Math.cos(theta),
+      y:  0.1 + r * Math.sin(phi) * Math.sin(theta) * 0.8,
+      z:  0.1 + r * Math.cos(phi),
+      type: 'leaf'
+    });
+  }
+
+  // ── Secondary cluster (right bulge) ──────────────────
+  for (let i = 0; i < 1200; i++) {
+    const theta = Math.random() * Math.PI * 2;
+    const phi = Math.acos(2 * Math.random() - 1);
+    const r = 0.65 * (0.85 + Math.random() * 0.15);
+    points.push({
+      x:  0.8 + r * Math.sin(phi) * Math.cos(theta),
+      y:  0.2 + r * Math.sin(phi) * Math.sin(theta) * 0.8,
+      z:  0.0 + r * Math.cos(phi),
+      type: 'leaf'
+    });
+  }
+
+  // ── Top tuft ──────────────────────────────────────────
+  for (let i = 0; i < 600; i++) {
+    const theta = Math.random() * Math.PI * 2;
+    const phi = Math.acos(2 * Math.random() - 1);
+    const r = 0.45 * (0.85 + Math.random() * 0.15);
+    points.push({
+      x:  0.1 + r * Math.sin(phi) * Math.cos(theta),
+      y:  1.0 + r * Math.abs(Math.sin(phi)) * Math.sin(theta) * 0.7,
+      z:  0.0 + r * Math.cos(phi),
+      type: 'leaf'
+    });
+  }
+
+  return points;
+}
+
+const TREE_POINTS = generateTreePoints();
 
 export default function GlobeCanvas({ size = 480 }) {
   const canvasRef = useRef(null);
-  const maskCanvasRef = useRef(null);
   const [loaded, setLoaded] = useState(false);
 
   useEffect(() => {
@@ -15,103 +91,135 @@ export default function GlobeCanvas({ size = 480 }) {
     const W = size;
     const H = size;
 
-    canvas.width = W * dpr;
+    canvas.width  = W * dpr;
     canvas.height = H * dpr;
-    canvas.style.width = `${W}px`;
+    canvas.style.width  = `${W}px`;
     canvas.style.height = `${H}px`;
 
     const ctx = canvas.getContext('2d');
     ctx.scale(dpr, dpr);
 
-    // Load tree image
-    const img = new Image();
-    img.crossOrigin = 'anonymous';
-    img.src = treeImg;
+    const cx = W / 2;
+    const cy = H / 2 + 20;
+    const scale = W / 3.2;
 
-    img.onload = () => {
-      // Create offscreen mask canvas
-      const maskC = document.createElement('canvas');
-      maskC.width = W;
-      maskC.height = H;
-      const mCtx = maskC.getContext('2d');
+    let rotY = 0;
+    let rotX = 0.08; // slight tilt
+    let autoRotate = true;
+    let isDragging = false;
+    let lastX = 0, lastY = 0;
+    let velX = 0;
 
-      // Draw tree image scaled to fit canvas
-      const scale = Math.min(W / img.width, H / img.height) * 0.95;
-      const iw = img.width * scale;
-      const ih = img.height * scale;
-      const ix = (W - iw) / 2;
-      const iy = (H - ih) / 2;
-      mCtx.drawImage(img, ix, iy, iw, ih);
+    const project = (x, y, z) => {
+      // Rotate around Y axis
+      const cosY = Math.cos(rotY), sinY = Math.sin(rotY);
+      const x1 = x * cosY + z * sinY;
+      const z1 = -x * sinY + z * cosY;
 
-      const imageData = mCtx.getImageData(0, 0, W, H);
-      const pixels = imageData.data;
+      // Rotate around X axis
+      const cosX = Math.cos(rotX), sinX = Math.sin(rotX);
+      const y1 = y * cosX - z1 * sinX;
+      const z2 = y * sinX + z1 * cosX;
 
-      // Sample dots from non-transparent, non-white pixels
-      const dots = [];
-      const spacing = 7;
-      for (let y = 0; y < H; y += spacing) {
-        for (let x = 0; x < W; x += spacing) {
-          const i = (y * W + x) * 4;
-          const r = pixels[i];
-          const g = pixels[i + 1];
-          const b = pixels[i + 2];
-          const a = pixels[i + 3];
-
-          if (a < 80) continue; // transparent
-          const brightness = (r + g + b) / 3;
-          if (brightness > 210) continue; // near-white background
-
-          // Classify dot color based on pixel
-          // Trunk = brownish, leaves = greenish
-          const isLeaf = g > r && g > b;
-          const isTrunk = r > 80 && g > 50 && b < 80 && !isLeaf;
-
-          dots.push({ x, y, isLeaf, isTrunk, brightness });
-        }
-      }
-
-      setLoaded(true);
-
-      // Animate with shimmer wave
-      let frame = 0;
-      let animId;
-
-      const render = () => {
-        ctx.clearRect(0, 0, W, H);
-        frame++;
-
-        dots.forEach(({ x, y, isLeaf, isTrunk, brightness }) => {
-          // Wave shimmer effect
-          const wave = Math.sin((x + y) * 0.03 + frame * 0.04) * 0.5 + 0.5;
-          const alpha = 0.3 + wave * 0.7;
-
-          let color;
-          if (isTrunk) {
-            color = `rgba(160, 120, 80, ${alpha * 0.8})`;
-          } else if (isLeaf) {
-            // Brighter leaves get lighter green dot
-            const lightness = brightness / 255;
-            const g = Math.round(150 + lightness * 80);
-            color = `rgba(80, ${g}, 80, ${alpha})`;
-          } else {
-            color = `rgba(126, 200, 122, ${alpha * 0.6})`;
-          }
-
-          ctx.beginPath();
-          ctx.arc(x, y, 1.4, 0, Math.PI * 2);
-          ctx.fillStyle = color;
-          ctx.fill();
-        });
-
-        animId = requestAnimationFrame(render);
+      return {
+        sx: cx + x1 * scale,
+        sy: cy - y1 * scale,
+        depth: z2
       };
-
-      render();
-
-      return () => cancelAnimationFrame(animId);
     };
 
-    return () => {};
+    setLoaded(true);
+
+    let animId;
+    const render = () => {
+      ctx.clearRect(0, 0, W, H);
+
+      // Sort by depth for painter's algorithm
+      const projected = TREE_POINTS.map(p => ({
+        ...project(p.x, p.y, p.z),
+        type: p.type
+      })).sort((a, b) => a.depth - b.depth);
+
+      projected.forEach(({ sx, sy, depth, type }) => {
+        if (sx < -10 || sx > W + 10 || sy < -10 || sy > H + 10) return;
+
+        // Depth-based brightness
+        const d = Math.max(0, Math.min(1, (depth + 2) / 4));
+        const bright = 0.25 + d * 0.75;
+
+        let r, g, b, radius;
+        if (type === 'trunk') {
+          r = Math.round(140 * bright);
+          g = Math.round(95 * bright);
+          b = Math.round(55 * bright);
+          radius = 1.0;
+        } else {
+          // Leaves: mix dark/bright green based on depth
+          r = Math.round(40 * bright);
+          g = Math.round(160 + 40 * d);
+          b = Math.round(50 * bright);
+          radius = 1.2;
+        }
+
+        ctx.beginPath();
+        ctx.arc(sx, sy, radius, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(${r},${g},${b},${(0.5 + d * 0.5).toFixed(2)})`;
+        ctx.fill();
+      });
+
+      // Glow outline under tree
+      const grad = ctx.createRadialGradient(cx, cy + 60, 0, cx, cy + 60, scale * 0.6);
+      grad.addColorStop(0, 'rgba(126,200,122,0.12)');
+      grad.addColorStop(1, 'transparent');
+      ctx.beginPath();
+      ctx.ellipse(cx, cy + 65, scale * 0.55, scale * 0.08, 0, 0, Math.PI * 2);
+      ctx.fillStyle = grad;
+      ctx.fill();
+
+      if (autoRotate) rotY += 0.008;
+      animId = requestAnimationFrame(render);
+    };
+
+    render();
+
+    // Drag to rotate
+    const onDown = (e) => {
+      isDragging = true;
+      autoRotate = false;
+      lastX = e.clientX ?? e.touches?.[0]?.clientX;
+      lastY = e.clientY ?? e.touches?.[0]?.clientY;
+      velX = 0;
+    };
+    const onMove = (e) => {
+      if (!isDragging) return;
+      const x = e.clientX ?? e.touches?.[0]?.clientX;
+      const y = e.clientY ?? e.touches?.[0]?.clientY;
+      velX = (x - lastX) * 0.01;
+      rotY += velX;
+      rotX = Math.max(-0.4, Math.min(0.5, rotX + (y - lastY) * 0.005));
+      lastX = x; lastY = y;
+    };
+    const onUp = () => {
+      isDragging = false;
+      setTimeout(() => { autoRotate = true; }, 1500);
+    };
+
+    canvas.addEventListener('mousedown', onDown);
+    canvas.addEventListener('touchstart', onDown, { passive: true });
+    document.addEventListener('mousemove', onMove);
+    document.addEventListener('touchmove', onMove, { passive: true });
+    document.addEventListener('mouseup', onUp);
+    document.addEventListener('touchend', onUp);
+
+    return () => {
+      cancelAnimationFrame(animId);
+      canvas.removeEventListener('mousedown', onDown);
+      canvas.removeEventListener('touchstart', onDown);
+      document.removeEventListener('mousemove', onMove);
+      document.removeEventListener('touchmove', onMove);
+      document.removeEventListener('mouseup', onUp);
+      document.removeEventListener('touchend', onUp);
+    };
   }, [size]);
 
   return (
@@ -122,7 +230,7 @@ export default function GlobeCanvas({ size = 480 }) {
         </div>
       )}
       <canvas ref={canvasRef} className={`globe-canvas ${loaded ? 'globe-visible' : ''}`} />
-      <p className="globe-hint">Manjares del Campo</p>
+      <p className="globe-hint">Arrastra para rotar</p>
     </div>
   );
 }

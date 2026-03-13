@@ -9,7 +9,7 @@
   text-align: center;
   width: 100%;
   margin-top: -70px;
-  padding-top: 220px;
+  padding-top: 170px;
 }
 
 .products-content {
@@ -324,3 +324,9 @@
 }
 
 .results-filtered { color: var(--primary-green); font-weight: 700; }
+
+@media (max-width: 768px) {
+  .page-header {
+    padding-top: 220px !important;
+  }
+}

@@ -94,15 +94,58 @@ router.patch('/:id/status', authenticateToken, async (req, res) => {
   if (status === 'cancelado' && !cancel_reason?.trim()) {
     return res.status(400).json({ error: 'Debes ingresar un motivo de cancelación' });
   }
+  const client = await pool.connect();
   try {
-    const { rows } = await pool.query(
-      'UPDATE orders SET status=$1, cancel_reason=$2 WHERE id=$3 RETURNING *',
-      [status, cancel_reason || null, req.params.id]
+    await client.query('BEGIN');
+
+    const orderRes = await client.query('SELECT * FROM orders WHERE id=$1 FOR UPDATE', [req.params.id]);
+    if (!orderRes.rows.length) {
+      await client.query('ROLLBACK');
+      return res.status(404).json({ error: 'Pedido no encontrado' });
+    }
+    const order = orderRes.rows[0];
+    const prevStatus = order.status;
+
+    // Obtener items del pedido
+    const itemsRes = await client.query(
+      'SELECT product_id, quantity FROM order_items WHERE order_id=$1',
+      [order.id]
     );
-    if (!rows.length) return res.status(404).json({ error: 'Pedido no encontrado' });
-    res.json(rows[0]);
+    const items = itemsRes.rows;
+
+    // Si el pedido pasa a 'en_camino' y antes no estaba en 'en_camino', descontar stock
+    if (prevStatus !== 'en_camino' && status === 'en_camino') {
+      for (const it of items) {
+        await client.query(
+          'UPDATE products SET stock = stock - $1 WHERE id = $2',
+          [it.quantity, it.product_id]
+        );
+      }
+    }
+
+    // Si el pedido estaba en 'en_camino' y ahora se cancela, restaurar stock
+    if (prevStatus === 'en_camino' && status === 'cancelado') {
+      for (const it of items) {
+        await client.query(
+          'UPDATE products SET stock = stock + $1 WHERE id = $2',
+          [it.quantity, it.product_id]
+        );
+      }
+    }
+
+    const updatedRes = await client.query(
+      'UPDATE orders SET status=$1, cancel_reason=$2 WHERE id=$3 RETURNING *',
+      [status, cancel_reason || null, order.id]
+    );
+
+    await client.query('COMMIT');
+    res.json(updatedRes.rows[0]);
   } catch (err) {
+    await client.query('ROLLBACK');
+    console.error(err);
     res.status(500).json({ error: 'Error al actualizar estado' });
+  } finally {
+    client.release();
   }
 });
 

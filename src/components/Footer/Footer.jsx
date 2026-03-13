@@ -47,7 +47,7 @@ export default function Footer() {
             <div className="footer-contact">
               <div className="contact-item">
                 <div className="contact-icon-wrap"><MapPin size={16} /></div>
-                <span>Vereda El Carmen, Funza</span>
+                <span>Barranquilla, Atlántico</span>
               </div>
               <div className="contact-item">
                 <div className="contact-icon-wrap"><Phone size={16} /></div>

@@ -80,6 +80,9 @@ export async function initDatabase() {
       )
     `);
 
+    // Migración: agregar cancel_reason si no existe
+    await pool.query(`ALTER TABLE orders ADD COLUMN IF NOT EXISTS cancel_reason TEXT`);
+
     // Verificar si existe un admin por defecto
     const adminExists = await pool.query('SELECT * FROM admins LIMIT 1');
     if (adminExists.rows.length === 0) {

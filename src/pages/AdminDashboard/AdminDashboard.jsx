@@ -31,6 +31,7 @@ export default function AdminDashboard() {
   const [showProductForm, setShowProductForm] = useState(false);
   const [editingProduct, setEditingProduct] = useState(null);
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [orderModal, setOrderModal] = useState(null); // { type: "cancel"|"delete", order }
   const [realOrders, setRealOrders] = useState([]);
   const [statsData, setStatsData] = useState(null);
   const [loadingOrders, setLoadingOrders] = useState(false);
@@ -88,11 +89,18 @@ export default function AdminDashboard() {
   const topProducts = Object.entries(productFreq).sort((a, b) => b[1] - a[1]).slice(0, 5)
     .map(([name, qty]) => ({ name: name.length > 18 ? name.slice(0, 18) + '…' : name, qty }));
 
-  const handleUpdateStatus = async (orderId, newStatus) => {
+  const handleUpdateStatus = async (orderId, newStatus, cancelReason) => {
     try {
-      await ordersAPI.updateStatus(orderId, newStatus);
-      setRealOrders(prev => prev.map(o => o.id === orderId ? { ...o, status: newStatus } : o));
+      await ordersAPI.updateStatus(orderId, newStatus, cancelReason);
+      setRealOrders(prev => prev.map(o => o.id === orderId ? { ...o, status: newStatus, cancel_reason: cancelReason } : o));
     } catch (e) { alert('Error al actualizar estado'); }
+  };
+
+  const handleDeleteOrder = async (orderId, reason) => {
+    try {
+      await ordersAPI.deleteOrder(orderId, reason);
+      setRealOrders(prev => prev.filter(o => o.id !== orderId));
+    } catch (e) { alert('Error al eliminar pedido'); }
   };
 
   const menuItems = [
@@ -255,12 +263,24 @@ export default function AdminDashboard() {
                         <td style={{ color: GREEN, fontWeight: 600 }}>{fmt(order.total)}</td>
                         <td><span className={`status-badge status-${order.status || 'pendiente'}`}>{STATUS_LABELS[order.status] || 'Pendiente'}</span></td>
                         <td>
-                          {STATUS_NEXT[order.status] && (
-                            <button className="action-btn edit-btn" style={{ fontSize: '0.7rem', padding: '4px 8px', width: 'auto', borderRadius: '6px' }}
-                              onClick={() => handleUpdateStatus(order.id, STATUS_NEXT[order.status])}>
-                              → {STATUS_LABELS[STATUS_NEXT[order.status]]}
+                          <div className="action-buttons" style={{flexWrap:'wrap',gap:'4px'}}>
+                            {STATUS_NEXT[order.status] && (
+                              <button className="action-btn edit-btn" style={{ fontSize: '0.7rem', padding: '4px 8px', width: 'auto', borderRadius: '6px', whiteSpace:'nowrap' }}
+                                onClick={() => handleUpdateStatus(order.id, STATUS_NEXT[order.status])}>
+                                → {STATUS_LABELS[STATUS_NEXT[order.status]]}
+                              </button>
+                            )}
+                            {order.status !== 'cancelado' && order.status !== 'entregado' && (
+                              <button className="action-btn" style={{ fontSize: '0.7rem', padding: '4px 8px', width: 'auto', borderRadius: '6px', background:'rgba(245,158,11,0.1)', color:'#92690a', border:'1px solid rgba(245,158,11,0.3)', whiteSpace:'nowrap' }}
+                                onClick={() => setOrderModal({ type: 'cancel', order })}>
+                                ✕ Cancelar
+                              </button>
+                            )}
+                            <button className="action-btn delete-btn" style={{ fontSize: '0.7rem', padding: '4px 8px', width: 'auto', borderRadius: '6px', whiteSpace:'nowrap' }}
+                              onClick={() => setOrderModal({ type: 'delete', order })}>
+                              🗑 Eliminar
                             </button>
-                          )}
+                          </div>
                         </td>
                       </tr>
                     ))}
@@ -340,6 +360,22 @@ export default function AdminDashboard() {
         )}
       </main>
 
+      {orderModal && (
+        <OrderActionModal
+          type={orderModal.type}
+          order={orderModal.order}
+          onClose={() => setOrderModal(null)}
+          onConfirm={(reason) => {
+            if (orderModal.type === 'cancel') {
+              handleUpdateStatus(orderModal.order.id, 'cancelado', reason);
+            } else {
+              handleDeleteOrder(orderModal.order.id, reason);
+            }
+            setOrderModal(null);
+          }}
+        />
+      )}
+
       {showProductForm && (
         <ProductFormModal
           product={editingProduct}
@@ -411,6 +447,60 @@ function ProductFormModal({ product, onClose, onSave }) {
             <button type="submit" className="save-btn">Guardar</button>
           </div>
         </form>
+      </div>
+    </div>
+  );
+}
+
+function OrderActionModal({ type, order, onClose, onConfirm }) {
+  const [reason, setReason] = useState('');
+  const isCancel = type === 'cancel';
+  const title   = isCancel ? `Cancelar pedido #${order.id}` : `Eliminar pedido #${order.id}`;
+  const label   = isCancel ? 'Motivo de cancelación' : 'Motivo de eliminación';
+  const btnText = isCancel ? 'Cancelar pedido' : 'Eliminar pedido';
+  const btnClass = isCancel ? 'cancel-order-btn' : 'delete-order-btn';
+
+  return (
+    <div className="modal-overlay" onClick={onClose}>
+      <div className="modal-content order-action-modal" onClick={e => e.stopPropagation()}>
+        <div className={`order-modal-header ${isCancel ? 'cancel-header' : 'delete-header'}`}>
+          <h2 className="modal-title">{title}</h2>
+          <p className="order-modal-sub">
+            {isCancel
+              ? 'Este pedido será marcado como cancelado. El cliente podrá ver el motivo.'
+              : 'Esta acción es irreversible. El pedido será eliminado permanentemente.'}
+          </p>
+        </div>
+
+        <div className="order-modal-body">
+          <div className="order-modal-info">
+            <span>Cliente:</span> <strong>{order.customer_name || '—'}</strong>
+            <span>Total:</span>   <strong>{`$${Number(order.total).toLocaleString('es-CO')}`}</strong>
+          </div>
+
+          <div className="form-group" style={{ marginTop: '1rem' }}>
+            <label>{label} <span style={{ color: '#e53e3e' }}>*</span></label>
+            <textarea
+              rows={3}
+              value={reason}
+              onChange={e => setReason(e.target.value)}
+              placeholder={isCancel ? 'Ej: Producto sin stock, cliente solicitó cancelación...' : 'Ej: Pedido duplicado, prueba del sistema...'}
+              style={{ resize: 'vertical' }}
+            />
+          </div>
+        </div>
+
+        <div className="modal-actions">
+          <button type="button" className="cancel-btn" onClick={onClose}>Volver</button>
+          <button
+            type="button"
+            className={btnClass}
+            disabled={!reason.trim()}
+            onClick={() => onConfirm(reason.trim())}
+          >
+            {btnText}
+          </button>
+        </div>
       </div>
     </div>
   );

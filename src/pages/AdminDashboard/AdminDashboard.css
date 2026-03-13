@@ -730,3 +730,40 @@
   .charts-grid { grid-template-columns: 1fr; }
   .chart-card-wide { grid-column: 1; }
 }
+
+/* ── Order Action Modal ── */
+.order-action-modal { max-width: 460px; padding: 0; overflow: hidden; }
+
+.order-modal-header { padding: 1.5rem 1.75rem 1.25rem; }
+.cancel-header { background: linear-gradient(135deg, #fff8e1, #fffde7); border-bottom: 2px solid #f59e0b; }
+.delete-header { background: linear-gradient(135deg, #fff5f5, #ffe4e4); border-bottom: 2px solid #e53e3e; }
+.cancel-header .modal-title { color: #92400e; }
+.delete-header .modal-title { color: #c53030; }
+.order-modal-sub { font-size: 0.85rem; color: #666; margin: 0.25rem 0 0; }
+
+.order-modal-body { padding: 1.25rem 1.75rem; }
+.order-modal-info {
+  display: grid; grid-template-columns: auto 1fr;
+  gap: 0.35rem 0.75rem; font-size: 0.88rem;
+  background: #f9f9f9; border-radius: 8px; padding: 0.85rem 1rem;
+  color: #666;
+}
+.order-modal-info strong { color: #2D5A27; }
+
+.order-action-modal .modal-actions { padding: 1rem 1.75rem 1.5rem; border-top: 1px solid #f0f0f0; }
+
+.cancel-order-btn {
+  background: #f59e0b; color: #fff; border: none; border-radius: 8px;
+  padding: 0.6rem 1.4rem; font-size: 0.9rem; font-weight: 600;
+  cursor: pointer; font-family: inherit; transition: background 0.2s;
+}
+.cancel-order-btn:hover:not(:disabled) { background: #d97706; }
+.cancel-order-btn:disabled { opacity: 0.45; cursor: not-allowed; }
+
+.delete-order-btn {
+  background: #e53e3e; color: #fff; border: none; border-radius: 8px;
+  padding: 0.6rem 1.4rem; font-size: 0.9rem; font-weight: 600;
+  cursor: pointer; font-family: inherit; transition: background 0.2s;
+}
+.delete-order-btn:hover:not(:disabled) { background: #c53030; }
+.delete-order-btn:disabled { opacity: 0.45; cursor: not-allowed; }

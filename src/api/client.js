@@ -194,12 +194,21 @@ export const ordersAPI = {
     });
     return handleResponse(response);
   },
-  updateStatus: async (id, status) => {
+  updateStatus: async (id, status, cancel_reason) => {
     const token = getToken();
     const response = await fetch(`${API_URL}/orders/${id}/status`, {
       method: 'PATCH',
       headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
-      body: JSON.stringify({ status })
+      body: JSON.stringify({ status, cancel_reason })
+    });
+    return handleResponse(response);
+  },
+  deleteOrder: async (id, reason) => {
+    const token = getToken();
+    const response = await fetch(`${API_URL}/orders/${id}`, {
+      method: 'DELETE',
+      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+      body: JSON.stringify({ reason })
     });
     return handleResponse(response);
   },

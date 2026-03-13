@@ -3,7 +3,7 @@ import { useNavigate, Navigate } from 'react-router-dom';
 import {
   LayoutDashboard, Package, ShoppingCart, BarChart3,
   LogOut, Plus, Edit, Trash2, Users, DollarSign, Image,
-  TrendingUp, Clock, CheckCircle, XCircle, Eye
+  TrendingUp, Clock, CheckCircle, XCircle, Eye, Menu, X
 } from 'lucide-react';
 import {
   BarChart, Bar, LineChart, Line, PieChart, Pie, Cell,
@@ -30,6 +30,7 @@ export default function AdminDashboard() {
   const [activeSection, setActiveSection] = useState('dashboard');
   const [showProductForm, setShowProductForm] = useState(false);
   const [editingProduct, setEditingProduct] = useState(null);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   const [realOrders, setRealOrders] = useState([]);
   const [statsData, setStatsData] = useState(null);
   const [loadingOrders, setLoadingOrders] = useState(false);
@@ -108,16 +109,23 @@ export default function AdminDashboard() {
     { icon: CheckCircle,  label: 'Entregados',         value: deliveredCount,             bg: 'rgba(126,200,122,0.15)',iconColor: '#2a7a2a' },
   ];
 
+  const closeSidebar = () => setSidebarOpen(false);
+
   return (
     <div className="admin-layout">
-      <aside className="admin-sidebar">
+      {/* Mobile overlay */}
+      {sidebarOpen && <div className="sidebar-overlay" onClick={closeSidebar} />}
+
+      <aside className={`admin-sidebar ${sidebarOpen ? 'sidebar-open' : ''}`}>
+        {/* Mobile close button */}
+        <button className="sidebar-close-btn" onClick={closeSidebar}><X size={20} /></button>
         <div className="sidebar-header">
           <img src={logoImg} alt="Manjares del Campo" className="sidebar-logo-img" />
           <span className="sidebar-badge">Panel Admin</span>
         </div>
         <nav className="sidebar-nav">
           {menuItems.map(({ id, icon: Icon, label }) => (
-            <button key={id} className={`sidebar-item ${activeSection === id ? 'active' : ''}`} onClick={() => setActiveSection(id)}>
+            <button key={id} className={`sidebar-item ${activeSection === id ? 'active' : ''}`} onClick={() => { setActiveSection(id); closeSidebar(); }}>
               <Icon size={18} />{label}
             </button>
           ))}
@@ -133,6 +141,11 @@ export default function AdminDashboard() {
       </aside>
 
       <main className="admin-main">
+        {/* Mobile topbar */}
+        <div className="admin-topbar">
+          <button className="hamburger-btn" onClick={() => setSidebarOpen(true)}><Menu size={22} /></button>
+          <span className="admin-topbar-title">Panel Admin</span>
+        </div>
 
         {/* ── Dashboard ── */}
         {activeSection === 'dashboard' && (

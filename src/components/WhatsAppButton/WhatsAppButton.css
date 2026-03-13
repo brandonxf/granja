@@ -45,3 +45,10 @@
   50%  { transform: scale(1.5); opacity: 0.15; }
   100% { transform: scale(1.7); opacity: 0; }
 }
+
+@media (max-width: 768px) {
+  .whatsapp-pulse {
+    animation: none;
+    display: none;
+  }
+}

@@ -1,4 +1,5 @@
-import { Leaf, Heart, TreePine } from 'lucide-react';
+import { Leaf, Heart, TreePine, MapPin } from 'lucide-react';
+import GlobeCanvas from '../../components/GlobeCanvas/GlobeCanvas';
 import './About.css';
 import aboutFarm from '../../assets/about-farm.jpg';
 
@@ -36,10 +37,7 @@ export default function About() {
               </p>
             </div>
             <div className="about-image">
-              <img 
-                src={aboutFarm} 
-                alt="Nuestra granja"
-              />
+              <img src={aboutFarm} alt="Nuestra granja" />
             </div>
           </div>
 
@@ -61,6 +59,49 @@ export default function About() {
                 <h3>Tradición</h3>
                 <p>Métodos ancestrales combinados con las mejores prácticas modernas.</p>
               </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ── Dónde estamos ── */}
+      <section className="location-section">
+        <div className="container">
+          <div className="location-header">
+            <MapPin className="location-pin-icon" />
+            <h2 className="location-title">¿Dónde estamos?</h2>
+            <p className="location-subtitle">
+              Estamos ubicados en Dibulla, La Guajira, Colombia — en el corazón de una de las regiones más fértiles del Caribe colombiano.
+            </p>
+          </div>
+
+          <div className="location-grid">
+            <div className="location-info">
+              <div className="location-detail">
+                <span className="location-label">Región</span>
+                <span className="location-value">La Guajira, Colombia</span>
+              </div>
+              <div className="location-detail">
+                <span className="location-label">Municipio</span>
+                <span className="location-value">Dibulla</span>
+              </div>
+              <div className="location-detail">
+                <span className="location-label">Zona</span>
+                <span className="location-value">Costa Caribe Colombiana</span>
+              </div>
+              <div className="location-detail">
+                <span className="location-label">Clima</span>
+                <span className="location-value">Tropical, ideal para cultivos orgánicos</span>
+              </div>
+              <p className="location-desc">
+                Nuestra granja se beneficia del clima cálido y húmedo del Caribe, los suelos ricos en minerales 
+                de la Sierra Nevada de Santa Marta y las aguas limpias de los ríos de La Guajira. 
+                Estas condiciones únicas son las que le dan a nuestros productos su sabor inigualable.
+              </p>
+            </div>
+
+            <div className="location-globe">
+              <GlobeCanvas size={460} />
             </div>
           </div>
         </div>

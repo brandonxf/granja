@@ -6,7 +6,6 @@ import ProductCard from '../../components/ProductCard/ProductCard';
 import SplitText from '../../components/SplitText/SplitText';
 import './Home.css';
 import heroVegetables from '../../assets/hero-vegetables.jpg';
-import GlobeCanvas from '../../components/GlobeCanvas/GlobeCanvas';
 
 export default function Home() {
   const { products } = useApp();
@@ -16,13 +15,8 @@ export default function Home() {
   const spotlight2Ref = useRef(null);
   const actionsRef = useRef(null);
   const statsRef = useRef(null);
-  const globeRef = useRef(null);
-  const [showGlobe, setShowGlobe] = useState(false);
 
-  const handleTitleComplete = () => {
-    // Globe fades in after title finishes
-    setTimeout(() => setShowGlobe(true), 100);
-  };
+  const handleTitleComplete = () => {};
 
   const handleDescComplete = () => {
     if (actionsRef.current) actionsRef.current.style.opacity = '1';
@@ -165,17 +159,6 @@ export default function Home() {
             </div>
           </div>
 
-          <div
-            ref={globeRef}
-            className="hero-globe"
-            style={{
-              opacity: showGlobe ? 1 : 0,
-              transform: showGlobe ? 'translateY(0) scale(1)' : 'translateY(24px) scale(0.97)',
-              transition: 'opacity 1s ease, transform 1s ease',
-            }}
-          >
-            <GlobeCanvas size={560} />
-          </div>
         </div>
 
         <div className="scroll-cue">

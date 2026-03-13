@@ -1,236 +1,117 @@
 import { useEffect, useRef, useState } from 'react';
-import * as d3 from 'd3';
 import './GlobeCanvas.css';
+import treeImg from '../../assets/tree.png';
 
 export default function GlobeCanvas({ size = 480 }) {
   const canvasRef = useRef(null);
+  const maskCanvasRef = useRef(null);
   const [loaded, setLoaded] = useState(false);
 
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
 
-    const ctx = canvas.getContext('2d');
     const dpr = window.devicePixelRatio || 1;
     const W = size;
     const H = size;
-    const radius = size / 2.2;
 
     canvas.width = W * dpr;
     canvas.height = H * dpr;
     canvas.style.width = `${W}px`;
     canvas.style.height = `${H}px`;
+
+    const ctx = canvas.getContext('2d');
     ctx.scale(dpr, dpr);
 
-    const projection = d3.geoOrthographic()
-      .scale(radius)
-      .translate([W / 2, H / 2])
-      .clipAngle(90);
+    // Load tree image
+    const img = new Image();
+    img.crossOrigin = 'anonymous';
+    img.src = treeImg;
 
-    const path = d3.geoPath().projection(projection).context(ctx);
+    img.onload = () => {
+      // Create offscreen mask canvas
+      const maskC = document.createElement('canvas');
+      maskC.width = W;
+      maskC.height = H;
+      const mCtx = maskC.getContext('2d');
 
-    const pointInPolygon = (point, polygon) => {
-      const [x, y] = point;
-      let inside = false;
-      for (let i = 0, j = polygon.length - 1; i < polygon.length; j = i++) {
-        const [xi, yi] = polygon[i];
-        const [xj, yj] = polygon[j];
-        if (yi > y !== yj > y && x < ((xj - xi) * (y - yi)) / (yj - yi) + xi) {
-          inside = !inside;
-        }
-      }
-      return inside;
-    };
+      // Draw tree image scaled to fit canvas
+      const scale = Math.min(W / img.width, H / img.height) * 0.95;
+      const iw = img.width * scale;
+      const ih = img.height * scale;
+      const ix = (W - iw) / 2;
+      const iy = (H - ih) / 2;
+      mCtx.drawImage(img, ix, iy, iw, ih);
 
-    const pointInFeature = (point, feature) => {
-      const geo = feature.geometry;
-      if (geo.type === 'Polygon') {
-        if (!pointInPolygon(point, geo.coordinates[0])) return false;
-        for (let i = 1; i < geo.coordinates.length; i++) {
-          if (pointInPolygon(point, geo.coordinates[i])) return false;
-        }
-        return true;
-      } else if (geo.type === 'MultiPolygon') {
-        for (const poly of geo.coordinates) {
-          if (pointInPolygon(point, poly[0])) {
-            let inHole = false;
-            for (let i = 1; i < poly.length; i++) {
-              if (pointInPolygon(point, poly[i])) { inHole = true; break; }
-            }
-            if (!inHole) return true;
-          }
-        }
-        return false;
-      }
-      return false;
-    };
+      const imageData = mCtx.getImageData(0, 0, W, H);
+      const pixels = imageData.data;
 
-    const generateDots = (feature, spacing = 16) => {
+      // Sample dots from non-transparent, non-white pixels
       const dots = [];
-      const [[minLng, minLat], [maxLng, maxLat]] = d3.geoBounds(feature);
-      const step = spacing * 0.08;
-      for (let lng = minLng; lng <= maxLng; lng += step) {
-        for (let lat = minLat; lat <= maxLat; lat += step) {
-          if (pointInFeature([lng, lat], feature)) dots.push([lng, lat]);
+      const spacing = 7;
+      for (let y = 0; y < H; y += spacing) {
+        for (let x = 0; x < W; x += spacing) {
+          const i = (y * W + x) * 4;
+          const r = pixels[i];
+          const g = pixels[i + 1];
+          const b = pixels[i + 2];
+          const a = pixels[i + 3];
+
+          if (a < 80) continue; // transparent
+          const brightness = (r + g + b) / 3;
+          if (brightness > 210) continue; // near-white background
+
+          // Classify dot color based on pixel
+          // Trunk = brownish, leaves = greenish
+          const isLeaf = g > r && g > b;
+          const isTrunk = r > 80 && g > 50 && b < 80 && !isLeaf;
+
+          dots.push({ x, y, isLeaf, isTrunk, brightness });
         }
       }
-      return dots;
-    };
 
-    const allDots = [];
-    let landFeatures = null;
-    const rotation = [0, -20];
+      setLoaded(true);
 
-    const render = () => {
-      ctx.clearRect(0, 0, W, H);
+      // Animate with shimmer wave
+      let frame = 0;
+      let animId;
 
-      // Globe base
-      ctx.beginPath();
-      ctx.arc(W / 2, H / 2, radius, 0, 2 * Math.PI);
-      ctx.fillStyle = '#071a06';
-      ctx.fill();
+      const render = () => {
+        ctx.clearRect(0, 0, W, H);
+        frame++;
 
-      // Outer glow
-      const glow = ctx.createRadialGradient(W/2, H/2, radius * 0.5, W/2, H/2, radius * 1.15);
-      glow.addColorStop(0, 'transparent');
-      glow.addColorStop(1, 'rgba(126,200,122,0.15)');
-      ctx.beginPath();
-      ctx.arc(W / 2, H / 2, radius * 1.15, 0, 2 * Math.PI);
-      ctx.fillStyle = glow;
-      ctx.fill();
+        dots.forEach(({ x, y, isLeaf, isTrunk, brightness }) => {
+          // Wave shimmer effect
+          const wave = Math.sin((x + y) * 0.03 + frame * 0.04) * 0.5 + 0.5;
+          const alpha = 0.3 + wave * 0.7;
 
-      // Globe border
-      ctx.beginPath();
-      ctx.arc(W / 2, H / 2, radius, 0, 2 * Math.PI);
-      ctx.strokeStyle = 'rgba(126,200,122,0.35)';
-      ctx.lineWidth = 1.5;
-      ctx.stroke();
+          let color;
+          if (isTrunk) {
+            color = `rgba(160, 120, 80, ${alpha * 0.8})`;
+          } else if (isLeaf) {
+            // Brighter leaves get lighter green dot
+            const lightness = brightness / 255;
+            const g = Math.round(150 + lightness * 80);
+            color = `rgba(80, ${g}, 80, ${alpha})`;
+          } else {
+            color = `rgba(126, 200, 122, ${alpha * 0.6})`;
+          }
 
-      if (!landFeatures) return;
-
-      // Graticule lines
-      const graticule = d3.geoGraticule()();
-      ctx.beginPath();
-      path(graticule);
-      ctx.strokeStyle = 'rgba(126,200,122,0.1)';
-      ctx.lineWidth = 0.5;
-      ctx.stroke();
-
-      // Land outlines
-      ctx.beginPath();
-      landFeatures.features.forEach(f => path(f));
-      ctx.strokeStyle = 'rgba(126,200,122,0.45)';
-      ctx.lineWidth = 0.7;
-      ctx.stroke();
-
-      // Colombia marker
-      const colProj = projection(COLOMBIA);
-      if (colProj) {
-        const [cx, cy] = colProj;
-        const visible = d3.geoDistance(COLOMBIA, [-rotation[0], -rotation[1]]) < Math.PI / 2;
-        if (visible) {
-          // Outer pulse ring
-          const pSize = 6 + Math.sin(pulse) * 4;
-          const pAlpha = 0.6 - Math.sin(pulse) * 0.3;
           ctx.beginPath();
-          ctx.arc(cx, cy, pSize, 0, 2 * Math.PI);
-          ctx.strokeStyle = `rgba(255,220,50,${pAlpha})`;
-          ctx.lineWidth = 1.5;
-          ctx.stroke();
-
-          // Second ring
-          const pSize2 = 10 + Math.sin(pulse) * 5;
-          const pAlpha2 = 0.3 - Math.sin(pulse) * 0.2;
-          ctx.beginPath();
-          ctx.arc(cx, cy, pSize2, 0, 2 * Math.PI);
-          ctx.strokeStyle = `rgba(255,220,50,${Math.max(0, pAlpha2)})`;
-          ctx.lineWidth = 1;
-          ctx.stroke();
-
-          // Core dot
-          ctx.beginPath();
-          ctx.arc(cx, cy, 4, 0, 2 * Math.PI);
-          ctx.fillStyle = '#FFD700';
+          ctx.arc(x, y, 1.4, 0, Math.PI * 2);
+          ctx.fillStyle = color;
           ctx.fill();
-          ctx.strokeStyle = 'rgba(255,255,255,0.8)';
-          ctx.lineWidth = 1.2;
-          ctx.stroke();
-        }
-      }
-
-      // Dots with depth-based brightness
-      allDots.forEach(([lng, lat]) => {
-        const projected = projection([lng, lat]);
-        if (!projected) return;
-        const [px, py] = projected;
-        if (px < 0 || px > W || py < 0 || py > H) return;
-
-        const dx = (px - W/2) / radius;
-        const dy = (py - H/2) / radius;
-        const dist = Math.sqrt(dx*dx + dy*dy);
-        const alpha = 0.25 + (1 - dist) * 0.75;
-
-        ctx.beginPath();
-        ctx.arc(px, py, 1.1, 0, 2 * Math.PI);
-        ctx.fillStyle = `rgba(126,200,122,${alpha.toFixed(2)})`;
-        ctx.fill();
-      });
-    };
-
-    const load = async () => {
-      try {
-        const res = await fetch('https://raw.githubusercontent.com/martynafford/natural-earth-geojson/refs/heads/master/110m/physical/ne_110m_land.json');
-        landFeatures = await res.json();
-        landFeatures.features.forEach(f => {
-          generateDots(f, 16).forEach(d => allDots.push(d));
         });
-        setLoaded(true);
-        render();
-      } catch (e) {
-        console.error('Globe load error', e);
-      }
-    };
 
-    // Colombia coordinates
-    const COLOMBIA = [-74.8, 11.0];
-    let pulse = 0;
+        animId = requestAnimationFrame(render);
+      };
 
-    let autoRotate = true;
-    const timer = d3.timer(() => {
-      pulse += 0.06;
-      if (autoRotate) {
-        rotation[0] += 0.25;
-        projection.rotate(rotation);
-      }
       render();
-    });
 
-    const onMouseDown = (e) => {
-      autoRotate = false;
-      const sx = e.clientX, sy = e.clientY;
-      const sr = [...rotation];
-      const onMove = (me) => {
-        rotation[0] = sr[0] + (me.clientX - sx) * 0.4;
-        rotation[1] = Math.max(-90, Math.min(90, sr[1] - (me.clientY - sy) * 0.4));
-        projection.rotate(rotation);
-        render();
-      };
-      const onUp = () => {
-        document.removeEventListener('mousemove', onMove);
-        document.removeEventListener('mouseup', onUp);
-        setTimeout(() => { autoRotate = true; }, 100);
-      };
-      document.addEventListener('mousemove', onMove);
-      document.addEventListener('mouseup', onUp);
+      return () => cancelAnimationFrame(animId);
     };
 
-    canvas.addEventListener('mousedown', onMouseDown);
-    load();
-
-    return () => {
-      timer.stop();
-      canvas.removeEventListener('mousedown', onMouseDown);
-    };
+    return () => {};
   }, [size]);
 
   return (
@@ -241,7 +122,7 @@ export default function GlobeCanvas({ size = 480 }) {
         </div>
       )}
       <canvas ref={canvasRef} className={`globe-canvas ${loaded ? 'globe-visible' : ''}`} />
-      <p className="globe-hint">Arrastra para rotar</p>
+      <p className="globe-hint">Manjares del Campo</p>
     </div>
   );
 }

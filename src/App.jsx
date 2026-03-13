@@ -10,6 +10,7 @@ import About from './pages/About/About';
 import Contact from './pages/Contact/Contact';
 import AdminLogin from './pages/AdminLogin/AdminLogin';
 import AdminDashboard from './pages/AdminDashboard/AdminDashboard';
+import WhatsAppButton from './components/WhatsAppButton/WhatsAppButton';
 import './App.css';
 import { useScrollReveal } from './hooks/useScrollReveal';
 

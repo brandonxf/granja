@@ -2,13 +2,14 @@
 .about-page {
   min-height: 80vh;
   overflow-x: hidden;
-  background: #ffffff;
+  padding: 0;
 }
 
 /* ── Hero ── */
 .about-hero {
   background: linear-gradient(135deg, var(--primary-green) 0%, var(--dark-forest) 100%);
   text-align: center;
+  width: 100%;
   margin-top: -70px;
   padding: 170px 1rem 3rem;
 }

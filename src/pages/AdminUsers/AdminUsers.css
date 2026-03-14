@@ -46,10 +46,10 @@
 /* ── Users table column widths ── */
 .users-table table { table-layout: fixed; width: 100%; }
 .users-table th:nth-child(1),
-.users-table td:nth-child(1) { width: 180px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.users-table td:nth-child(1) { width: 25%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .users-table th:nth-child(2),
-.users-table td:nth-child(2) { width: auto; }
+.users-table td:nth-child(2) { width: 40%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .users-table th:nth-child(3),
-.users-table td:nth-child(3) { width: 140px; }
+.users-table td:nth-child(3) { width: 20%; }
 .users-table th:nth-child(4),
-.users-table td:nth-child(4) { width: 110px; }
+.users-table td:nth-child(4) { width: 15%; }

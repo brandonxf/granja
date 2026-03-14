@@ -54,7 +54,7 @@ export default function AdminUsers({ currentAdmin }) {
       {loading ? (
         <p className="dashboard-empty">Cargando usuarios...</p>
       ) : (
-        <div className="products-table">
+        <div className="products-table users-table">
           <table>
             <thead>
               <tr>

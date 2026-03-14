@@ -58,8 +58,7 @@ export default function AdminUsers({ currentAdmin }) {
           <table>
             <thead>
               <tr>
-                <th>Nombre</th>
-                <th>Apellido</th>
+                <th>Nombre completo</th>
                 <th>Email</th>
                 <th>Rol</th>
                 <th>Acciones</th>
@@ -68,8 +67,7 @@ export default function AdminUsers({ currentAdmin }) {
             <tbody>
               {users.map(user => (
                 <tr key={user.id}>
-                  <td>{user.name}</td>
-                  <td>{user.last_name || '—'}</td>
+                  <td>{user.name} {user.last_name || ''}</td>
                   <td style={{ color: '#888', fontSize: '0.88rem' }}>{user.email}</td>
                   <td>
                     <span className={`role-badge role-${user.role}`}>

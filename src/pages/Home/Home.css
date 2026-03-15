@@ -188,9 +188,9 @@
 .hero-title-wrapper {
   position: relative;
   z-index: 10;
-  margin-bottom: -0.55em;
+  margin-bottom: -0.75em;
   overflow: visible;
-  transform: translateY(-0.25em);
+  transform: translateY(-0.1em);
 }
 
 .hero-title-top {

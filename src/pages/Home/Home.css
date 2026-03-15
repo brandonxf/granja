@@ -186,10 +186,10 @@
 
 .hero-title-wrapper {
   position: relative;
-  z-index: 1;
-  margin-bottom: -0.25em;
+  z-index: 3;
+  margin-bottom: -0.35em;
   overflow: visible;
-  transform: translateY(-0.08em);
+  transform: translateY(-0.12em);
 }
 
 .hero-title-top {

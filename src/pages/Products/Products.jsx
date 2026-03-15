@@ -180,7 +180,7 @@ export default function Products() {
           <div className="no-products">
             <Search size={40} opacity={0.2} />
             <p>No se encontraron productos</p>
-            <button className="clear-filters-btn" onClick={clearFilters}>Limpiar filtros</button>
+
           </div>
         ) : (
           <div className="products-grid">

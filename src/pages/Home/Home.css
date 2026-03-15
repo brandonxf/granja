@@ -121,13 +121,12 @@
   transform: rotate(12deg) translateX(50%);
 }
 
-/* Hero content */
 .hero-inner {
   position: relative;
   z-index: 10;
   width: 100%;
   padding-top: 80px;
-  padding-bottom: 80px;
+  padding-bottom: 100px;
   display: grid;
   grid-template-columns: 1fr 1fr;
   align-items: center;
@@ -179,15 +178,15 @@
   flex-direction: column;
   position: relative;
   margin-bottom: 1.5rem;
-  line-height: 1.1;
-  min-height: 1.2em;
-  padding-bottom: 0.15em;
+  line-height: 1.25;
+  min-height: 1.3em;
+  padding-bottom: 0.25em;
 }
 
 .hero-title-wrapper {
   position: relative;
   z-index: 1;
-  margin-bottom: -0.1em;
+  margin-bottom: -0.05em;
   overflow: visible;
 }
 

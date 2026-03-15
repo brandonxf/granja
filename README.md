@@ -51,6 +51,7 @@ Conecta directamente a productores del campo con consumidores finales, con pedid
 ### Checkout por WhatsApp
 - 💬 **Botón flotante** de WhatsApp en toda la aplicación
 - 📦 **Resumen de pedido automático** — genera un mensaje con productos, cantidades y total listo para enviar
+- 🔍 **Seguimiento de pedidos** — los clientes pueden rastrear el estado de sus pedidos
 
 ### Diseño
 - 🌍 **Globo terráqueo 3D interactivo** con punto pulsante sobre Colombia (D3.js)
@@ -64,6 +65,9 @@ Conecta directamente a productores del campo con consumidores finales, con pedid
 - 📋 **CRUD completo de productos** — crear, editar, eliminar
 - 🖼️ **Subida de imágenes** a Cloudinary
 - 📊 **Panel de estadísticas** — total de productos, categorías y valores
+- 👥 **Gestión de usuarios** — listar, crear y eliminar usuarios administradores
+- 👤 **Perfil de admin** — ver y actualizar datos del perfil
+- 📦 **Seguimiento de pedidos** — gestión de pedidos de clientes
 
 ---
 
@@ -110,7 +114,17 @@ manjares-del-campo/
 │   ├── favicon.png
 │   └── logo.png
 ├── server/
-│   └── index.js              # API REST Express
+│   ├── index.js              # API REST Express
+│   ├── config/
+│   │   └── db.js             # Conexión a PostgreSQL
+│   ├── middleware/
+│   │   └── auth.js          # Middleware de autenticación JWT
+│   └── routes/
+│       ├── products.js      # CRUD de productos
+│       ├── auth.js          # Autenticación de admins
+│       ├── orders.js        # Gestión de pedidos
+│       ├── admins.js        # Gestión de usuarios admin
+│       └── upload.js        # Subida de imágenes a Cloudinary
 ├── src/
 │   ├── api/
 │   │   └── client.js         # Funciones de fetch al backend
@@ -133,8 +147,11 @@ manjares-del-campo/
 │   │   ├── Cart/             # Carrito + checkout WhatsApp
 │   │   ├── About/
 │   │   ├── Contact/
+│   │   ├── OrderTracking/    # Seguimiento de pedidos
 │   │   ├── AdminLogin/
-│   │   └── AdminDashboard/
+│   │   ├── AdminDashboard/   # Panel principal admin
+│   │   ├── AdminUsers/       # Gestión de usuarios
+│   │   └── AdminProfile/    # Perfil del admin
 │   ├── App.jsx
 │   └── main.jsx
 ├── .env                      # Variables de entorno (no incluido)
@@ -202,10 +219,13 @@ Accede en `/admin/login` con tus credenciales de administrador.
 
 | Función | Descripción |
 |---------|-------------|
+| **Dashboard** | Panel principal con estadísticas y gráficos |
 | **Productos** | Crear, editar y eliminar productos con imagen |
 | **Categorías** | Ver categorías disponibles |
+| **Usuarios** | Listar, crear y eliminar usuarios administradores |
+| **Pedidos** | Ver y gestionar pedidos de clientes |
+| **Perfil** | Ver y actualizar datos del perfil de admin |
 | **Imágenes** | Subida directa a Cloudinary con preview |
-| **Estadísticas** | Resumen de inventario y valores totales |
 
 ---
 

@@ -190,7 +190,7 @@
   z-index: 10;
   margin-bottom: -0.75em;
   overflow: visible;
-  transform: translateY(-0.1em);
+  transform: translateY(0.15em);
 }
 
 .hero-title-top {

@@ -177,9 +177,16 @@
 .hero-title {
   display: flex;
   flex-direction: column;
-  gap: 0;
+  position: relative;
   margin-bottom: 1.5rem;
-  line-height: 0.95;
+  line-height: 0.85;
+  min-height: 1.2em;
+}
+
+.hero-title-wrapper {
+  position: relative;
+  z-index: 1;
+  margin-bottom: -0.15em;
 }
 
 .hero-title-top {
@@ -188,15 +195,24 @@
   font-weight: 700;
   color: #ffffff;
   letter-spacing: -3px;
+  display: block;
+  opacity: 0.85;
 }
 
 .hero-title-bottom {
   font-family: 'Fraunces', serif;
   font-size: clamp(3rem, 8vw, 6.5rem);
   font-weight: 300;
-  color: transparent;
-  -webkit-text-stroke: 1px rgba(255,255,255,0.4);
+  color: #ffffff;
   letter-spacing: -1px;
+  position: relative;
+  z-index: 2;
+  text-shadow: 0 2px 20px rgba(0, 0, 0, 0.3);
+}
+
+.hero-title-bottom em {
+  font-style: italic;
+  color: #7ec87a;
 }
 
 .hero-title-bottom em {

@@ -86,20 +86,22 @@ export default function Home() {
 
             {/* Title */}
             <h1 className="hero-title">
-              <SplitText
-                text="Manjares"
-                tag="span"
-                className="hero-title-top"
-                splitType="chars"
-                delay={60}
-                duration={1.2}
-                ease="power3.out"
-                from={{ opacity: 0, y: 80 }}
-                to={{ opacity: 1, y: 0 }}
-                threshold={0}
-                rootMargin="0px"
-                textAlign="left"
-              />
+              <span className="hero-title-wrapper">
+                <SplitText
+                  text="Manjares"
+                  tag="span"
+                  className="hero-title-top"
+                  splitType="chars"
+                  delay={60}
+                  duration={1.2}
+                  ease="power3.out"
+                  from={{ opacity: 0, y: 80 }}
+                  to={{ opacity: 1, y: 0 }}
+                  threshold={0}
+                  rootMargin="0px"
+                  textAlign="left"
+                />
+              </span>
               <SplitText
                 text="del Campo"
                 tag="span"

@@ -122,7 +122,7 @@ const SplitText = ({
 
   const style = {
     textAlign,
-    overflow: 'hidden',
+    overflow: 'visible',
     display: 'inline-block',
     whiteSpace: 'normal',
     wordWrap: 'break-word',

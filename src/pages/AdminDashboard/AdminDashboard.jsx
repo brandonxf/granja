@@ -3,7 +3,7 @@ import { useNavigate, Navigate } from 'react-router-dom';
 import {
   LayoutDashboard, Package, ShoppingCart, BarChart3,
   LogOut, Plus, Edit, Trash2, Users, DollarSign, Image,
-  TrendingUp, Clock, CheckCircle, XCircle, Eye, Menu, X, UserCircle
+  TrendingUp, Clock, CheckCircle, XCircle, Eye, Menu, X, UserCircle, Tag
 } from 'lucide-react';
 import {
   BarChart, Bar, LineChart, Line, PieChart, Pie, Cell,
@@ -12,7 +12,7 @@ import {
 import { useApp } from '../../context/AppContext';
 import AdminUsers from '../AdminUsers/AdminUsers';
 import AdminProfile from '../AdminProfile/AdminProfile';
-import { uploadAPI, ordersAPI } from '../../api/client';
+import { uploadAPI, ordersAPI, productsAPI } from '../../api/client';
 import './AdminDashboard.css';
 import logoImg from '../../assets/logo.png';
 
@@ -108,6 +108,7 @@ export default function AdminDashboard() {
   const menuItems = [
     { id: 'dashboard', icon: LayoutDashboard, label: 'Dashboard' },
     { id: 'products',  icon: Package,         label: 'Productos' },
+    { id: 'categories',icon: Tag,             label: 'Categorías' },
     { id: 'orders',    icon: ShoppingCart,     label: 'Pedidos' },
     { id: 'stats',     icon: BarChart3,        label: 'Estadísticas' },
     { id: 'users',     icon: Users,            label: 'Usuarios' },
@@ -241,6 +242,11 @@ export default function AdminDashboard() {
               </table>
             </div>
           </div>
+        )}
+
+        {/* ── Categories ── */}
+        {activeSection === 'categories' && (
+          <AdminCategories />
         )}
 
         {/* ── Orders ── */}
@@ -511,6 +517,199 @@ function OrderActionModal({ type, order, onClose, onConfirm }) {
             {btnText}
           </button>
         </div>
+      </div>
+    </div>
+  );
+}
+
+/* ═══════════════════════════════════════
+   ADMIN CATEGORIES COMPONENT
+═══════════════════════════════════════ */
+function AdminCategories() {
+  const [cats, setCats] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [modal, setModal] = useState(null); // {type:'create'|'edit'|'delete', cat?}
+  const [error, setError] = useState('');
+
+  const load = () => {
+    setLoading(true);
+    productsAPI.getCategories()
+      .then(data => setCats(Array.isArray(data) ? data : []))
+      .catch(() => setCats([]))
+      .finally(() => setLoading(false));
+  };
+
+  useEffect(() => { load(); }, []);
+
+  const handleToggle = async (cat) => {
+    try {
+      const updated = await productsAPI.toggleCategory(cat.id);
+      setCats(prev => prev.map(c => c.id === cat.id ? { ...c, active: updated.active } : c));
+    } catch (e) { alert(e.message || 'Error al cambiar estado'); }
+  };
+
+  const handleDelete = async (cat) => {
+    try {
+      await productsAPI.deleteCategory(cat.id);
+      setCats(prev => prev.filter(c => c.id !== cat.id));
+      setModal(null);
+    } catch (e) {
+      setError(e.message || 'Error al eliminar');
+    }
+  };
+
+  const handleSave = async (formData, id) => {
+    try {
+      if (id) {
+        const updated = await productsAPI.updateCategory(id, formData);
+        setCats(prev => prev.map(c => c.id === id ? updated : c));
+      } else {
+        const created = await productsAPI.createCategory(formData);
+        setCats(prev => [...prev, created]);
+      }
+      setModal(null);
+    } catch (e) {
+      throw e;
+    }
+  };
+
+  return (
+    <div className="admin-section">
+      <div className="section-header-admin">
+        <div>
+          <h1 className="admin-page-title">Categorías</h1>
+          <p className="admin-page-sub">{cats.length} categorías registradas</p>
+        </div>
+        <button className="add-product-btn" onClick={() => setModal({ type: 'create' })}>
+          <Plus size={16} /> Nueva categoría
+        </button>
+      </div>
+
+      {loading ? (
+        <p className="dashboard-empty">Cargando categorías...</p>
+      ) : (
+        <div className="products-table">
+          <table>
+            <thead>
+              <tr>
+                <th style={{width:'35%'}}>Nombre</th>
+                <th style={{width:'40%'}}>Descripción</th>
+                <th style={{width:'12%'}}>Estado</th>
+                <th style={{width:'13%'}}>Acciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              {cats.map(cat => (
+                <tr key={cat.id} style={{ opacity: cat.active === false ? 0.5 : 1 }}>
+                  <td style={{ fontWeight: 600, color: '#2D5A27' }}>{cat.name}</td>
+                  <td style={{ color: '#888', fontSize: '0.88rem' }}>{cat.description || '—'}</td>
+                  <td>
+                    <span className={`status-badge ${cat.active === false ? 'status-cancelado' : 'status-entregado'}`}>
+                      {cat.active === false ? 'Inactiva' : 'Activa'}
+                    </span>
+                  </td>
+                  <td>
+                    <div className="action-buttons">
+                      <button className="action-btn edit-btn" title="Editar"
+                        onClick={() => setModal({ type: 'edit', cat })}>
+                        <Edit size={15} />
+                      </button>
+                      <button
+                        className="action-btn edit-btn"
+                        title={cat.active === false ? 'Activar' : 'Desactivar'}
+                        style={{ color: cat.active === false ? '#2D5A27' : '#f59e0b' }}
+                        onClick={() => handleToggle(cat)}>
+                        {cat.active === false ? <CheckCircle size={15} /> : <XCircle size={15} />}
+                      </button>
+                      <button className="action-btn delete-btn" title="Eliminar"
+                        onClick={() => { setError(''); setModal({ type: 'delete', cat }); }}>
+                        <Trash2 size={15} />
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
+
+      {/* Modal crear/editar */}
+      {(modal?.type === 'create' || modal?.type === 'edit') && (
+        <CatFormModal
+          cat={modal.cat}
+          onClose={() => setModal(null)}
+          onSave={(data) => handleSave(data, modal.cat?.id)}
+        />
+      )}
+
+      {/* Modal eliminar */}
+      {modal?.type === 'delete' && (
+        <div className="modal-overlay" onClick={() => setModal(null)}>
+          <div className="modal-content" style={{ maxWidth: 420 }} onClick={e => e.stopPropagation()}>
+            <h2 className="modal-title" style={{ color: '#c53030' }}>Eliminar categoría</h2>
+            <p style={{ color: '#555', margin: '0.5rem 0 1.25rem', fontSize: '0.95rem' }}>
+              ¿Eliminar <strong>{modal.cat.name}</strong>? Esta acción no se puede deshacer.
+            </p>
+            {error && (
+              <div style={{ background: '#fff5f5', color: '#c53030', padding: '0.65rem 1rem', borderRadius: 8, marginBottom: '1rem', fontSize: '0.85rem', border: '1px solid #fed7d7' }}>
+                {error}
+              </div>
+            )}
+            <div className="modal-actions">
+              <button className="cancel-btn" onClick={() => setModal(null)}>Cancelar</button>
+              <button className="save-btn" style={{ background: '#c53030' }}
+                onClick={() => handleDelete(modal.cat)}>
+                Eliminar
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+function CatFormModal({ cat, onClose, onSave }) {
+  const [form, setForm] = useState({ name: cat?.name || '', description: cat?.description || '' });
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+
+  const handle = async (e) => {
+    e.preventDefault();
+    setError(''); setLoading(true);
+    try { await onSave(form); }
+    catch (err) { setError(err.message || 'Error al guardar'); }
+    finally { setLoading(false); }
+  };
+
+  return (
+    <div className="modal-overlay" onClick={onClose}>
+      <div className="modal-content" style={{ maxWidth: 460 }} onClick={e => e.stopPropagation()}>
+        <h2 className="modal-title">{cat ? 'Editar categoría' : 'Nueva categoría'}</h2>
+        {error && (
+          <div style={{ background: '#fff5f5', color: '#c53030', padding: '0.65rem 1rem', borderRadius: 8, marginBottom: '1rem', fontSize: '0.85rem', border: '1px solid #fed7d7' }}>
+            {error}
+          </div>
+        )}
+        <form className="product-form" onSubmit={handle}>
+          <div className="form-group">
+            <label>Nombre <span style={{ color: '#e53e3e' }}>*</span></label>
+            <input type="text" value={form.name}
+              onChange={e => setForm({ ...form, name: e.target.value })} required />
+          </div>
+          <div className="form-group">
+            <label>Descripción</label>
+            <textarea rows={3} value={form.description}
+              onChange={e => setForm({ ...form, description: e.target.value })} />
+          </div>
+          <div className="modal-actions">
+            <button type="button" className="cancel-btn" onClick={onClose}>Cancelar</button>
+            <button type="submit" className="save-btn" disabled={loading}>
+              {loading ? 'Guardando...' : 'Guardar'}
+            </button>
+          </div>
+        </form>
       </div>
     </div>
   );

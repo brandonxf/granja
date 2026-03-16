@@ -78,14 +78,42 @@ export const productsAPI = {
     const token = getToken();
     const response = await fetch(`${API_URL}/products/categories`, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`
-      },
+      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
       body: JSON.stringify(categoryData)
     });
     return handleResponse(response);
-  }
+  },
+
+  // Editar categoría
+  updateCategory: async (id, categoryData) => {
+    const token = getToken();
+    const response = await fetch(`${API_URL}/products/categories/${id}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+      body: JSON.stringify(categoryData)
+    });
+    return handleResponse(response);
+  },
+
+  // Activar/desactivar
+  toggleCategory: async (id) => {
+    const token = getToken();
+    const response = await fetch(`${API_URL}/products/categories/${id}/toggle`, {
+      method: 'PATCH',
+      headers: { 'Authorization': `Bearer ${token}` }
+    });
+    return handleResponse(response);
+  },
+
+  // Eliminar categoría
+  deleteCategory: async (id) => {
+    const token = getToken();
+    const response = await fetch(`${API_URL}/products/categories/${id}`, {
+      method: 'DELETE',
+      headers: { 'Authorization': `Bearer ${token}` }
+    });
+    return handleResponse(response);
+  },
 };
 
 // API de Autenticación

@@ -141,13 +141,71 @@ router.post('/categories', authenticateToken, isAdmin, async (req, res) => {
   try {
     const { name, description } = req.body;
     const result = await pool.query(
-      'INSERT INTO categories (name, description) VALUES ($1, $2) RETURNING *',
+      'INSERT INTO categories (name, description, active) VALUES ($1, $2, true) RETURNING *',
       [name, description]
     );
     res.status(201).json(result.rows[0]);
   } catch (error) {
-    console.error('Error al crear categoría:', error);
-    res.status(500).json({ error: 'Error al crear categoría' });
+    // Fallback sin columna active
+    try {
+      const { name, description } = req.body;
+      const result = await pool.query(
+        'INSERT INTO categories (name, description) VALUES ($1, $2) RETURNING *',
+        [name, description]
+      );
+      res.status(201).json(result.rows[0]);
+    } catch (e) {
+      res.status(500).json({ error: 'Error al crear categoría' });
+    }
+  }
+});
+
+// Editar categoría
+router.put('/categories/:id', authenticateToken, isAdmin, async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { name, description } = req.body;
+    const result = await pool.query(
+      'UPDATE categories SET name = $1, description = $2 WHERE id = $3 RETURNING *',
+      [name, description, id]
+    );
+    if (result.rows.length === 0) return res.status(404).json({ error: 'Categoría no encontrada' });
+    res.json(result.rows[0]);
+  } catch (error) {
+    res.status(500).json({ error: 'Error al editar categoría' });
+  }
+});
+
+// Activar/desactivar categoría
+router.patch('/categories/:id/toggle', authenticateToken, isAdmin, async (req, res) => {
+  try {
+    const { id } = req.params;
+    // Agregar columna active si no existe
+    await pool.query('ALTER TABLE categories ADD COLUMN IF NOT EXISTS active BOOLEAN DEFAULT true');
+    const result = await pool.query(
+      'UPDATE categories SET active = NOT COALESCE(active, true) WHERE id = $1 RETURNING *',
+      [id]
+    );
+    if (result.rows.length === 0) return res.status(404).json({ error: 'Categoría no encontrada' });
+    res.json(result.rows[0]);
+  } catch (error) {
+    res.status(500).json({ error: 'Error al cambiar estado' });
+  }
+});
+
+// Eliminar categoría
+router.delete('/categories/:id', authenticateToken, isAdmin, async (req, res) => {
+  try {
+    const { id } = req.params;
+    // Verificar si tiene productos
+    const products = await pool.query('SELECT COUNT(*) FROM products WHERE category_id = $1', [id]);
+    if (parseInt(products.rows[0].count) > 0) {
+      return res.status(400).json({ error: `No se puede eliminar: tiene ${products.rows[0].count} producto(s) asociado(s)` });
+    }
+    await pool.query('DELETE FROM categories WHERE id = $1', [id]);
+    res.json({ success: true });
+  } catch (error) {
+    res.status(500).json({ error: 'Error al eliminar categoría' });
   }
 });
 

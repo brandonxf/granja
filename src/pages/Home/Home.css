@@ -6,7 +6,7 @@
   min-height: 100vh;
   display: flex;
   align-items: center;
-  overflow: hidden;
+  overflow: visible;
   margin-top: -72px; /* compensate fixed navbar height */
   padding-top: 72px;
 }

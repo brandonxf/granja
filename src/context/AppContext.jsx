@@ -86,7 +86,9 @@ export function AppProvider({ children }) {
           'Carnes': 'Beef',
           'Artesanales': 'Sprout'
         };
-        const apiCategories = data.map(cat => ({
+        const apiCategories = data
+          .filter(cat => cat.active !== false)
+          .map(cat => ({
           id: cat.id.toString(),
           name: cat.name,
           icon: iconMapping[cat.name] || 'Grid'
